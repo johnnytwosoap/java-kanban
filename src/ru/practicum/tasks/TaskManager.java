@@ -14,7 +14,6 @@ public class TaskManager {
     public Task createTask(Task task){
         id+=1;
         task.setId(id);
-        task.setStatus(TaskStatus.NEW);
         tasks.put(id, task);
         return task;
     }
@@ -47,7 +46,6 @@ public class TaskManager {
         if (epics.containsKey(subTask.getEpicId())) {
             id+=1;
             subTask.setId(id);
-            subTask.setStatus(TaskStatus.NEW);
             subtasks.put(id, subTask);
             epics.get(subTask.getEpicId()).addSubTask(subTask);
             checkEpicStatus(subTask.getEpicId());
@@ -127,7 +125,6 @@ public class TaskManager {
         id+=1;
         epic.setId(id);
         epics.put(id, epic);
-        checkEpicStatus(id);
         return epic;
 
     }

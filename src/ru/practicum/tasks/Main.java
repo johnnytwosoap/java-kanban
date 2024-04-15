@@ -59,8 +59,8 @@ public class Main {
 
     public static void createTasks(TaskManager taskManager) {
         System.out.println("Создаем две задачи");
-        Task task1 = new Task("first task","firstTask description");
-        Task task2 = new Task("second task","secondTask description");
+        Task task1 = new Task("first task","firstTask description", TaskStatus.IN_PROGRESS);
+        Task task2 = new Task("second task","secondTask description", TaskStatus.DONE);
         Task firstTask = taskManager.createTask(task1);
         Task secondTask = taskManager.createTask(task2);
         System.out.println("Первая задача "+firstTask.toString());
@@ -73,18 +73,18 @@ public class Main {
         Epic epic1 = new Epic("first epic","firstEpic description");
         Epic firstEpic = taskManager.createEpic(epic1);
         System.out.println("Первый эпик без подзадач "+firstEpic.toString());
-        SubTask subTask1 = new SubTask("first subtask", "firstSubTask description", firstEpic.getId());
+        SubTask subTask1 = new SubTask("first subtask", "firstSubTask description", TaskStatus.DONE, firstEpic.getId());
         SubTask firstSubTask= taskManager.createSubTask(subTask1);
         System.out.println("Первая подзадача "+firstSubTask.toString());
 
         Epic epic2 = new Epic("second epic","secondEpic description");
         Epic secondEpic = taskManager.createEpic(epic2);
 
-        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", secondEpic.id);
+        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.id);
         SubTask secondSubTask= taskManager.createSubTask(subTask2);
         System.out.println("Вторая подзадача "+secondSubTask.toString());
 
-        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", secondEpic.id);
+        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.id);
         SubTask thirdSubTask= taskManager.createSubTask(subTask3);
         System.out.println("Третья подзадача "+thirdSubTask.toString());
         System.out.println("Первый эпик c подзадачами "+firstEpic.toString());

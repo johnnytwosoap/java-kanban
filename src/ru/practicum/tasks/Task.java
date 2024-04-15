@@ -7,9 +7,10 @@ public class Task {
     String description;
     TaskStatus status;
 
-    Task(String taskName, String description) {
+    Task(String taskName, String description, TaskStatus status) {
         this.taskName = taskName;
         this.description = description;
+        this.status = status;
     }
 
     public void setId(Integer id) {
