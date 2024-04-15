@@ -4,27 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task{
-    List<SubTask> subTasks = new ArrayList<>();
+    private List<Integer> subTasks = new ArrayList<>();
 
-    Epic(String taskName, String description, List<SubTask> subTasksId) {
+    Epic(String taskName, String description) {
         super(taskName, description);
-        this.subTasks.addAll(subTasksId);
     }
 
-    public void setId(Integer id) {
-        this.id=id;
+    public void addSubTask(SubTask subTask) {
+        this.subTasks.add(subTask.id);
     }
 
-    public void setStatus(TaskStatus status){
-        this.status = status;
+    public List<Integer> getSubTasks() {
+        return this.subTasks;
     }
 
-    public int addSubTask(SubTask subTask) {
-        this.subTasks.add(subTask);
-        return id;
+
+    public void removeSubTasks() {
+        this.subTasks.clear();
     }
 
-    public void removeSubTask(SubTask subTaskId) {
+    public void removeSubTask(Integer subTaskId) {
         this.subTasks.remove(subTaskId);
     }
 
@@ -34,8 +33,8 @@ public class Epic extends Task{
             return "Epic{id='" + id + "', taskName='" + taskName + "', description='" + description +"', status='"+status+"'}";
         } else {
             String subTaskList = "";
-            for (SubTask subTask: subTasks) {
-                subTaskList = subTaskList +", "+ subTask;
+            for (Integer subTaskId: subTasks) {
+                subTaskList = subTaskList +", "+ subTaskId;
             }
             return "Epic{id='" + id + "', taskName='" + taskName + "', description='" + description +"', status='"+status+"', SubTasks{" + subTaskList.substring(2) + "}}";
         }

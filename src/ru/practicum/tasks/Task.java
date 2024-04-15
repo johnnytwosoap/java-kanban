@@ -2,10 +2,10 @@ package ru.practicum.tasks;
 
 public class Task {
 
-    Integer id;
+    protected Integer id;
     String taskName;
     String description;
-    TaskStatus status = TaskStatus.NEW;
+    TaskStatus status;
 
     Task(String taskName, String description) {
         this.taskName = taskName;
@@ -16,8 +16,32 @@ public class Task {
         this.id=id;
     }
 
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName=taskName;
+    }
+
+    public String getTaskName() {
+        return this.taskName;
+    }
+
+    public void setDescription(String description) {
+        this.description=description;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
     public void setStatus(TaskStatus status){
         this.status = status;
+    }
+
+    public TaskStatus getStatus() {
+        return this.status;
     }
 
     public String toString() {

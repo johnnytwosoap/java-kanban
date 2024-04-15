@@ -46,9 +46,6 @@ public class Main {
         clearEpics(taskManager);
         System.out.println(" ");
 
-        clearSubTasks(taskManager);
-        System.out.println(" ");
-
         createTasks(taskManager);
         System.out.println(" ");
 
@@ -73,24 +70,21 @@ public class Main {
 
     public static void createEpicsAndSubTasks(TaskManager taskManager) {
         System.out.println("Создаем два эпика с подзадачами");
-        Epic epic1 = new Epic("first epic","firstEpic description", new ArrayList<>());
+        Epic epic1 = new Epic("first epic","firstEpic description");
         Epic firstEpic = taskManager.createEpic(epic1);
         System.out.println("Первый эпик без подзадач "+firstEpic.toString());
-        SubTask subTask1 = new SubTask("first subtask", "firstSubTask description",0);
+        SubTask subTask1 = new SubTask("first subtask", "firstSubTask description", firstEpic.getId());
         SubTask firstSubTask= taskManager.createSubTask(subTask1);
         System.out.println("Первая подзадача "+firstSubTask.toString());
-        List<SubTask> subTaskListSecond = new ArrayList<>();
-        subTaskListSecond.add(firstSubTask);
-        Epic epic2 = new Epic("second epic","secondEpic description", subTaskListSecond);
-        Epic secondEpic = taskManager.createEpic(epic2);
-        // System.out.println("Первый эпик с подзадачами "+firstEpic.toString());
-        System.out.println("Второй эпик с подзадачами"+secondEpic.toString());
 
-        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", firstEpic.id);
+        Epic epic2 = new Epic("second epic","secondEpic description");
+        Epic secondEpic = taskManager.createEpic(epic2);
+
+        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", secondEpic.id);
         SubTask secondSubTask= taskManager.createSubTask(subTask2);
         System.out.println("Вторая подзадача "+secondSubTask.toString());
 
-        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", firstEpic.id);
+        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", secondEpic.id);
         SubTask thirdSubTask= taskManager.createSubTask(subTask3);
         System.out.println("Третья подзадача "+thirdSubTask.toString());
         System.out.println("Первый эпик c подзадачами "+firstEpic.toString());
@@ -138,10 +132,6 @@ public class Main {
         }
         System.out.println("Список эпиков после удаления " + taskManager.getAllEpic());
         System.out.println("Список подзадач после удаления эпиков " + taskManager.getAllSubTasks());
-        for (SubTask task: taskManager.getAllSubTasks()) {
-            taskManager.deleteSubTask(task.id);
-        }
-        System.out.println("Список подзадач после удаления" + taskManager.getAllSubTasks());
     }
 
     public static void clearSubTasks(TaskManager taskManager) {
@@ -172,22 +162,22 @@ public class Main {
 
 
         System.out.println("Изменяем статусы подзаданий");
-        Epic epic = taskManager.getAllEpic().getFirst();
-        System.out.println(epic);
+        Epic epic = taskManager.getAllEpic().getLast();
+        System.out.println("Начальное состояние " + epic);
         List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epic.id);
         SubTask subTask = subTasks.getFirst();
         SubTask subTask1 = subTasks.getLast();
         subTask.setStatus(TaskStatus.IN_PROGRESS);
         taskManager.updateSubTask(subTask);
-        System.out.println(epic);
+        System.out.println("Одно подзадание статус в процессе " + epic);
         subTask.setStatus(TaskStatus.DONE);
         taskManager.updateSubTask(subTask);
-        System.out.println(epic);
+        System.out.println("Одно подзадание статус сделано " + epic);
         subTask1.setStatus(TaskStatus.IN_PROGRESS);
         taskManager.updateSubTask(subTask1);
-        System.out.println(epic);
+        System.out.println("Сделано + в процессе "+epic);
         subTask1.setStatus(TaskStatus.DONE);
         taskManager.updateSubTask(subTask1);
-        System.out.println(epic);
+        System.out.println("Два подзадания статус сделано " + epic);
     }
 }
