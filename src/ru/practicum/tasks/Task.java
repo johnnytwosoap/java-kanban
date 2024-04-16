@@ -3,9 +3,9 @@ package ru.practicum.tasks;
 public class Task {
 
     protected Integer id;
-    String taskName;
-    String description;
-    TaskStatus status;
+    protected String taskName;
+    protected String description;
+    protected TaskStatus status;
 
     Task(String taskName, String description, TaskStatus status) {
         this.taskName = taskName;
