@@ -1,12 +1,12 @@
 package ru.practicum.tasks;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager= new TaskManager();
+        Managers managers = new Managers();
+        TaskManager taskManager = managers.getDefault();
 
         System.out.println("Поехали!");
 
@@ -52,6 +52,9 @@ public class Main {
         createEpicsAndSubTasks(taskManager);
         System.out.println(" ");
 
+        checkHistory(taskManager);
+        System.out.println(" ");
+
         updateStatuses(taskManager);
         System.out.println("Окончание проверки");
 
@@ -74,20 +77,20 @@ public class Main {
         Epic firstEpic = taskManager.createEpic(epic1);
         System.out.println("Первый эпик без подзадач "+firstEpic.toString());
         SubTask subTask1 = new SubTask("first subtask", "firstSubTask description", TaskStatus.DONE, firstEpic.getId());
-        SubTask firstSubTask= taskManager.createSubTask(subTask1);
+        SubTask firstSubTask = taskManager.createSubTask(subTask1);
         System.out.println("Первая подзадача "+firstSubTask.toString());
 
         Epic epic2 = new Epic("second epic","secondEpic description");
         Epic secondEpic = taskManager.createEpic(epic2);
 
         SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.id);
-        SubTask secondSubTask= taskManager.createSubTask(subTask2);
+        SubTask secondSubTask = taskManager.createSubTask(subTask2);
         System.out.println("Вторая подзадача "+secondSubTask.toString());
 
         SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.id);
-        SubTask thirdSubTask= taskManager.createSubTask(subTask3);
+        SubTask thirdSubTask = taskManager.createSubTask(subTask3);
         System.out.println("Третья подзадача "+thirdSubTask.toString());
-        System.out.println("Первый эпик c подзадачами "+firstEpic.toString());
+        System.out.println("Первый эпик c подзадачами "+firstEpic);
         System.out.println("Все подзадачи "+taskManager.getAllSubTasks());
         System.out.println("Подзадачи второго эпика " + taskManager.getAllSubTasksByEpic(secondEpic.id));
     }
@@ -179,5 +182,22 @@ public class Main {
         subTask1.setStatus(TaskStatus.DONE);
         taskManager.updateSubTask(subTask1);
         System.out.println("Два подзадания статус сделано " + epic);
+    }
+
+    public static void checkHistory(TaskManager taskManager) {
+        System.out.println("Проверяем историю обращений");
+        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
+        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
+        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
+        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
+        System.out.println(taskManager.getHistory());
     }
 }
