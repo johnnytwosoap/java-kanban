@@ -1,4 +1,4 @@
-package ru.practicum.tasks;
+package ru.practicum.tasks.model;
 
 public class Task {
 

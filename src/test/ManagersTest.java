@@ -1,9 +1,7 @@
 package test;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.*;
-
-import java.util.List;
+import ru.practicum.tasks.service.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

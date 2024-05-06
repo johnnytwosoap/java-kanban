@@ -1,22 +1,28 @@
-package ru.practicum.tasks;
+package ru.practicum.tasks.service;
+
+import ru.practicum.tasks.model.Epic;
+import ru.practicum.tasks.model.SubTask;
+import ru.practicum.tasks.model.Task;
+import ru.practicum.tasks.model.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class InMemoryTaskManager implements TaskManager{
+public class InMemoryTaskManager implements TaskManager {
 
     Managers managers = new Managers();
     HistoryManager inMemoryHistoryManager = managers.getDefaultHistory();
     public static int id=0;
 
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, SubTask> subtasks = new HashMap<>();
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, SubTask> subtasks = new HashMap<>();
 
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return inMemoryHistoryManager.getHistory();
     }
 
@@ -31,7 +37,7 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public void updateTask(Task task){
         if (tasks.containsKey(task.getId())) {
-            tasks.put(task.id, task);
+            tasks.put(task.getId(), task);
         }
     }
 
@@ -71,7 +77,7 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public void updateSubTask(SubTask subTask){
         if (subtasks.containsKey(subTask.getId()) && subtasks.get(subTask.getId()).getEpicId().equals(subTask.getEpicId())) {
-            subtasks.put(subTask.id, subTask);
+            subtasks.put(subTask.getId(), subTask);
             checkEpicStatus(subTask.getEpicId());
         }
     }

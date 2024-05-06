@@ -1,7 +1,10 @@
 package test;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.*;
+import ru.practicum.tasks.model.Epic;
+import ru.practicum.tasks.model.SubTask;
+import ru.practicum.tasks.model.TaskStatus;
+import ru.practicum.tasks.service.InMemoryTaskManager;
 
 import java.util.List;
 
@@ -59,9 +62,9 @@ class SubTaskTest {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final int epicId = taskManager.createEpic(epic).getId();
         SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
-        taskManager.createSubTask(subTaskFirst).getId();
+        taskManager.createSubTask(subTaskFirst);
         SubTask subTaskSecond= new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
-        taskManager.createSubTask(subTaskSecond).getId();
+        taskManager.createSubTask(subTaskSecond);
 
         final List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epicId);
         assertEquals(2, subTasks.size(), "Неверное количество задач.");

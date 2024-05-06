@@ -1,11 +1,14 @@
-package ru.practicum.tasks;
+package ru.practicum.tasks.service;
 
-import java.util.ArrayList;
+import ru.practicum.tasks.model.Epic;
+import ru.practicum.tasks.model.SubTask;
+import ru.practicum.tasks.model.Task;
+
 import java.util.List;
 
 public interface TaskManager {
 
-    ArrayList<?> getHistory();
+    List<?> getHistory();
 
     Task createTask(Task task);
 

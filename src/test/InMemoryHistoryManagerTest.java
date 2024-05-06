@@ -1,7 +1,9 @@
 package test;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.*;
+import ru.practicum.tasks.model.Task;
+import ru.practicum.tasks.model.TaskStatus;
+import ru.practicum.tasks.service.InMemoryHistoryManager;
 
 import java.util.List;
 

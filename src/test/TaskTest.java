@@ -1,7 +1,9 @@
 package test;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.tasks.*;
+import ru.practicum.tasks.model.Task;
+import ru.practicum.tasks.model.TaskStatus;
+import ru.practicum.tasks.service.InMemoryTaskManager;
 
 import java.util.List;
 
@@ -43,9 +45,9 @@ class TaskTest {
     @Test
     void checkClearAllTask() {
         Task taskFirst = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
-        taskManager.createTask(taskFirst).getId();
+        taskManager.createTask(taskFirst);
         Task taskSecond = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
-        taskManager.createTask(taskSecond).getId();
+        taskManager.createTask(taskSecond);
         final List<Task> tasks = taskManager.getAllTasks();
         assertEquals(2, tasks.size(), "Неверное количество задач.");
         taskManager.deleteAllTasks();

@@ -1,5 +1,12 @@
 package ru.practicum.tasks;
 
+import ru.practicum.tasks.model.Epic;
+import ru.practicum.tasks.model.SubTask;
+import ru.practicum.tasks.model.Task;
+import ru.practicum.tasks.model.TaskStatus;
+import ru.practicum.tasks.service.Managers;
+import ru.practicum.tasks.service.TaskManager;
+
 import java.util.List;
 
 public class Main {
@@ -83,23 +90,23 @@ public class Main {
         Epic epic2 = new Epic("second epic","secondEpic description");
         Epic secondEpic = taskManager.createEpic(epic2);
 
-        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.id);
+        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.getId());
         SubTask secondSubTask = taskManager.createSubTask(subTask2);
         System.out.println("Вторая подзадача "+secondSubTask.toString());
 
-        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.id);
+        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.getId());
         SubTask thirdSubTask = taskManager.createSubTask(subTask3);
         System.out.println("Третья подзадача "+thirdSubTask.toString());
         System.out.println("Первый эпик c подзадачами "+firstEpic);
         System.out.println("Все подзадачи "+taskManager.getAllSubTasks());
-        System.out.println("Подзадачи второго эпика " + taskManager.getAllSubTasksByEpic(secondEpic.id));
+        System.out.println("Подзадачи второго эпика " + taskManager.getAllSubTasksByEpic(secondEpic.getId()));
     }
 
     public static void deleteTasks(TaskManager taskManager) {
         System.out.println("Удаляем задания по очереди");
         System.out.println("Список задач до удаления" + taskManager.getAllTasks());
         for (Task task: taskManager.getAllTasks()) {
-            taskManager.deleteTask(task.id);
+            taskManager.deleteTask(task.getId());
         }
         System.out.println("Список задач после удаления" + taskManager.getAllTasks());
     }
@@ -115,14 +122,14 @@ public class Main {
         System.out.println("Удаляем подзадания по очереди");
         System.out.println("Список подзадач до удаления" + taskManager.getAllSubTasks());
         for (SubTask task: taskManager.getAllSubTasks()) {
-            taskManager.deleteSubTask(task.id);
+            taskManager.deleteSubTask(task.getId());
         }
         System.out.println("Список подзадач после удаления" + taskManager.getAllSubTasks());
         System.out.println("Список эпиков после удаления подзадач " + taskManager.getAllEpic());
 
         System.out.println("Удаляем эпики по очереди");
         for (Epic task: taskManager.getAllEpic()) {
-            taskManager.deleteEpic(task.id);
+            taskManager.deleteEpic(task.getId());
         }
         System.out.println("Список эпиков после удаления " + taskManager.getAllEpic());
     }
@@ -131,7 +138,7 @@ public class Main {
         System.out.println("Удаляем эпики по очереди");
         System.out.println("Список эпиков до удаления " + taskManager.getAllEpic());
         for (Epic task: taskManager.getAllEpic()) {
-            taskManager.deleteEpic(task.id);
+            taskManager.deleteEpic(task.getId());
         }
         System.out.println("Список эпиков после удаления " + taskManager.getAllEpic());
         System.out.println("Список подзадач после удаления эпиков " + taskManager.getAllSubTasks());
@@ -167,7 +174,7 @@ public class Main {
         System.out.println("Изменяем статусы подзаданий");
         Epic epic = taskManager.getAllEpic().getLast();
         System.out.println("Начальное состояние " + epic);
-        List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epic.id);
+        List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epic.getId());
         SubTask subTask = subTasks.getFirst();
         SubTask subTask1 = subTasks.getLast();
         subTask.setStatus(TaskStatus.IN_PROGRESS);
@@ -186,18 +193,18 @@ public class Main {
 
     public static void checkHistory(TaskManager taskManager) {
         System.out.println("Проверяем историю обращений");
-        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
-        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
-        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
-        taskManager.getTask(taskManager.getAllTasks().getFirst().id);
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().id);
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().id);
+        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
+        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
+        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
+        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
+        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
+        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
         System.out.println(taskManager.getHistory());
     }
 }
