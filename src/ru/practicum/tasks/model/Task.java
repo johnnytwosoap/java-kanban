@@ -14,7 +14,7 @@ public class Task {
     }
 
     public void setId(Integer id) {
-        this.id=id;
+        this.id = id;
     }
 
     public Integer getId() {
@@ -22,7 +22,7 @@ public class Task {
     }
 
     public void setTaskName(String taskName) {
-        this.taskName=taskName;
+        this.taskName = taskName;
     }
 
     public String getTaskName() {
@@ -30,7 +30,7 @@ public class Task {
     }
 
     public void setDescription(String description) {
-        this.description=description;
+        this.description = description;
     }
 
     public String getDescription() {
