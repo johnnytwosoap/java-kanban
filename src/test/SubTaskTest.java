@@ -63,7 +63,7 @@ class SubTaskTest {
         final int epicId = taskManager.createEpic(epic).getId();
         SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         taskManager.createSubTask(subTaskFirst);
-        SubTask subTaskSecond= new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         taskManager.createSubTask(subTaskSecond);
 
         final List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epicId);

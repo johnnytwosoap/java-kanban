@@ -33,7 +33,7 @@ class InMemoryTaskManagerTest {
         SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         final int subTaskFirstId = taskManager.createSubTask(subTaskFirst).getId();
         final SubTask savedSubTaskFirst = taskManager.getSubTask(subTaskFirstId);
-        SubTask subTaskSecond= new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         final int subTaskSecondId = taskManager.createSubTask(subTaskSecond).getId();
         final SubTask savedSubTaskSecond = taskManager.getSubTask(subTaskSecondId);
 
