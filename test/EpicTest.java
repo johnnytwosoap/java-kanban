@@ -1,5 +1,3 @@
-package test;
-
 import org.junit.jupiter.api.Test;
 import ru.practicum.tasks.model.Epic;
 import ru.practicum.tasks.model.SubTask;

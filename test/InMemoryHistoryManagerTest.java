@@ -1,5 +1,3 @@
-package test;
-
 import org.junit.jupiter.api.Test;
 import ru.practicum.tasks.model.Task;
 import ru.practicum.tasks.model.TaskStatus;
@@ -8,7 +6,8 @@ import ru.practicum.tasks.service.InMemoryTaskManager;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class InMemoryHistoryManagerTest {
 

@@ -1,5 +1,3 @@
-package test;
-
 import org.junit.jupiter.api.Test;
 import ru.practicum.tasks.model.Epic;
 import ru.practicum.tasks.model.SubTask;
@@ -7,7 +5,7 @@ import ru.practicum.tasks.model.Task;
 import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.InMemoryTaskManager;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InMemoryTaskManagerTest {
 
