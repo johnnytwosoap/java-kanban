@@ -46,6 +46,6 @@ public class Task {
     }
 
     public String toString() {
-        return "Task{id='"+id+"', taskName='"+taskName+"', description='"+description+"', status='"+status+"'}";
+        return "Task{id='" + id + "', taskName='" + taskName + "', description='" + description + "', status='" + status + "'}";
     }
 }
