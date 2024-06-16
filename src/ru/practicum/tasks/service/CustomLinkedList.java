@@ -5,11 +5,7 @@ import ru.practicum.tasks.model.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD
 public class CustomLinkedList<T> {
-=======
-public class CustomLinkedList<T>{
->>>>>>> 8f501025a9c53cb4a5477cf7b9b91b3cbfade556
 
     private Node<T> head;
     private Node<T> tail;
@@ -30,10 +26,7 @@ public class CustomLinkedList<T>{
         }
         return tasks;
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 8f501025a9c53cb4a5477cf7b9b91b3cbfade556
     public Node<T> linkLast(T element) {
         final Node<T> oldTail = tail;
         final Node<T> newNode = new Node<>(oldTail, element,null);
