@@ -14,31 +14,20 @@ public class CustomLinkedList<T> {
 
     public List<T> getTasks() {
         List<T> tasks = new ArrayList<>();
-        if (head != null) {
-            Node<T> listHead = head;
-            while (listHead.getNext() != null) {
-                tasks.add(listHead.getData());
-                listHead = listHead.getNext();
-            }
-        }
-        if (tail != null) {
-            tasks.add(tail.getData());
+        Node<T> listHead = head;
+        while (listHead != null) {
+            tasks.add(listHead.getData());
+            listHead = listHead.getNext();
         }
         return tasks;
     }
 
     public Node<T> linkLast(T element) {
-        final Node<T> oldTail = tail;
-        final Node<T> newNode = new Node<>(oldTail, element,null);
+        final Node<T> newNode = new Node<>(tail, element,null);
         if (head == null) {
             head = newNode;
         } else {
-            if (head.getNext() == null) {
-                head.setNext(newNode);
-            }
-        }
-        if (oldTail != null) {
-            oldTail.setNext(newNode);
+            tail.setNext(newNode);
         }
         tail = newNode;
         size++;
@@ -51,13 +40,17 @@ public class CustomLinkedList<T> {
 
         if (taskHead == null) {
             head = taskTail;
-            taskTail.setPrev(null);
+            if (taskTail != null) {
+                taskTail.setPrev(null);
+            }
         } else {
             taskHead.setNext(taskTail);
         }
         if (taskTail == null) {
             tail = taskHead;
-            taskHead.setNext(null);
+            if (taskHead != null) {
+                taskHead.setNext(null);
+            }
         } else {
             taskTail.setPrev(taskHead);
         }
