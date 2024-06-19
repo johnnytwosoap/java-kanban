@@ -14,7 +14,7 @@ public class Task {
     }
 
     public void setId(Integer id) {
-        this.id=id;
+        this.id = id;
     }
 
     public Integer getId() {
@@ -22,7 +22,7 @@ public class Task {
     }
 
     public void setTaskName(String taskName) {
-        this.taskName=taskName;
+        this.taskName = taskName;
     }
 
     public String getTaskName() {
@@ -30,14 +30,14 @@ public class Task {
     }
 
     public void setDescription(String description) {
-        this.description=description;
+        this.description = description;
     }
 
     public String getDescription() {
         return this.description;
     }
 
-    public void setStatus(TaskStatus status){
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -46,6 +46,6 @@ public class Task {
     }
 
     public String toString() {
-        return "Task{id='"+id+"', taskName='"+taskName+"', description='"+description+"', status='"+status+"'}";
+        return "Task{id='" + id + "', taskName='" + taskName + "', description='" + description + "', status='" + status + "'}";
     }
 }

@@ -1,5 +1,3 @@
-package test;
-
 import org.junit.jupiter.api.Test;
 import ru.practicum.tasks.model.Epic;
 import ru.practicum.tasks.model.SubTask;
@@ -8,7 +6,8 @@ import ru.practicum.tasks.service.InMemoryTaskManager;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SubTaskTest {
 
@@ -63,7 +62,7 @@ class SubTaskTest {
         final int epicId = taskManager.createEpic(epic).getId();
         SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         taskManager.createSubTask(subTaskFirst);
-        SubTask subTaskSecond= new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         taskManager.createSubTask(subTaskSecond);
 
         final List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epicId);

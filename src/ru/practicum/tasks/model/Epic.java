@@ -30,13 +30,13 @@ public class Epic extends Task {
     @Override
     public String toString() {
         if (subTasks.isEmpty()) {
-            return "Epic{id='" + id + "', taskName='" + taskName + "', description='" + description +"', status='"+status+"'}";
+            return "Epic{id='" + id + "', taskName='" + taskName + "', description='" + description + "', status='" + status + "'}";
         } else {
             StringBuilder subTaskList = new StringBuilder();
             for (Integer subTaskId: subTasks) {
                 subTaskList.append(", ").append(subTaskId);
             }
-            return "Epic{id='" + id + "', taskName='" + taskName + "', description='" + description +"', status='"+status+"', SubTasks{" + subTaskList.substring(2) + "}}";
+            return "Epic{id='" + id + "', taskName='" + taskName + "', description='" + description + "', status='" + status + "', SubTasks{" + subTaskList.substring(2) + "}}";
         }
     }
 

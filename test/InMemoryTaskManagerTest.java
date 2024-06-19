@@ -1,5 +1,3 @@
-package test;
-
 import org.junit.jupiter.api.Test;
 import ru.practicum.tasks.model.Epic;
 import ru.practicum.tasks.model.SubTask;
@@ -7,11 +5,12 @@ import ru.practicum.tasks.model.Task;
 import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.InMemoryTaskManager;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InMemoryTaskManagerTest {
 
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
+
     @Test
     void checkStatus() {
         Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
@@ -33,7 +32,7 @@ class InMemoryTaskManagerTest {
         SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         final int subTaskFirstId = taskManager.createSubTask(subTaskFirst).getId();
         final SubTask savedSubTaskFirst = taskManager.getSubTask(subTaskFirstId);
-        SubTask subTaskSecond= new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
         final int subTaskSecondId = taskManager.createSubTask(subTaskSecond).getId();
         final SubTask savedSubTaskSecond = taskManager.getSubTask(subTaskSecondId);
 
