@@ -221,13 +221,13 @@ public class Main {
     public static void getResult(TaskManager taskManager) {
         System.out.println("Задания после всех проверок");
         for (Task task : taskManager.getAllTasks()) {
-            System.out.println("Task "+task.toString());
+            System.out.println("Task " + task.toString());
         }
         for (Epic task : taskManager.getAllEpic()) {
-            System.out.println("Epic "+task.toString());
+            System.out.println("Epic " + task.toString());
         }
         for (SubTask task : taskManager.getAllSubTasks()) {
-            System.out.println("SubTask "+task.toString());
+            System.out.println("SubTask " + task.toString());
         }
     }
 }
