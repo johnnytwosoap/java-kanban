@@ -40,4 +40,19 @@ public class Epic extends Task {
         }
     }
 
+
+    @Override
+    public String toFile() {
+        if (subTasks.isEmpty()) {
+            return id + ",Epic," + taskName + "," + description + "," + status;
+        } else {
+            StringBuilder subTaskList = new StringBuilder();
+            for (Integer subTaskId: subTasks) {
+                subTaskList.append(", ").append(subTaskId);
+            }
+            return id + ",Epic," + taskName + "," + description + "," + status +",{" + subTaskList.substring(2) + "}";
+        }
+
+    }
+
 }
