@@ -50,7 +50,7 @@ public class Epic extends Task {
             for (Integer subTaskId: subTasks) {
                 subTaskList.append(", ").append(subTaskId);
             }
-            return id + ",Epic," + taskName + "," + description + "," + status +",{" + subTaskList.substring(2) + "}";
+            return id + ",Epic," + taskName + "," + description + "," + status + ",{" + subTaskList.substring(2) + "}";
         }
 
     }
