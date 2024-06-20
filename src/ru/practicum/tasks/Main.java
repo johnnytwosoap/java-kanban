@@ -65,10 +65,10 @@ public class Main {
             updateStatuses(taskManager);
             System.out.println(" ");
 
-        }
 
-        checkHistory(taskManager);
-        System.out.println(" ");
+            checkHistory(taskManager);
+            System.out.println(" ");
+        }
 
 
         getResult(taskManager);
