@@ -19,9 +19,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private Boolean created;
 
     public FileBackedTaskManager() {
-        filePathForManager = Main.class.getResource("Main.class").getPath().substring(1).split("java-kanban")[0] + "java-kanban/static/tasks.csv";
+        filePathForManager = "static/tasks.csv";
 
-        Path fileTasks = Paths.get(filePathForManager);
+        Path fileTasks = Path.of(filePathForManager);
         try {
             if (!Files.exists(fileTasks)) {
                 Files.createFile(fileTasks);
