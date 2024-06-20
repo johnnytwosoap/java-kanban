@@ -13,56 +13,65 @@ public class Main {
 
     public static void main(String[] args) {
         Managers managers = new Managers();
-        TaskManager taskManager = managers.getDefault();
+        TaskManager taskManager = managers.getFileManager();
 
         System.out.println("Поехали!");
 
-        createTasks(taskManager);
-        System.out.println(" ");
+        if (taskManager.getCreated()) {
 
-        createEpicsAndSubTasks(taskManager);
-        System.out.println(" ");
+            createTasks(taskManager);
+            System.out.println(" ");
 
-        deleteTasks(taskManager);
-        System.out.println(" ");
+            createEpicsAndSubTasks(taskManager);
+            System.out.println(" ");
 
-        createTasks(taskManager);
-        System.out.println(" ");
+            deleteTasks(taskManager);
+            System.out.println(" ");
 
-        clearTasks(taskManager);
-        System.out.println(" ");
+            createTasks(taskManager);
+            System.out.println(" ");
 
-        deleteSubTasksAndEpics(taskManager);
-        System.out.println(" ");
+            clearTasks(taskManager);
+            System.out.println(" ");
 
-        createEpicsAndSubTasks(taskManager);
-        System.out.println(" ");
+            deleteSubTasksAndEpics(taskManager);
+            System.out.println(" ");
 
-        deleteEpicsAndSubTasks(taskManager);
-        System.out.println(" ");
+            createEpicsAndSubTasks(taskManager);
+            System.out.println(" ");
 
-        createEpicsAndSubTasks(taskManager);
-        System.out.println(" ");
+            deleteEpicsAndSubTasks(taskManager);
+            System.out.println(" ");
 
-        clearSubTasks(taskManager);
-        System.out.println(" ");
+            createEpicsAndSubTasks(taskManager);
+            System.out.println(" ");
 
-        createEpicsAndSubTasks(taskManager);
-        System.out.println(" ");
+            clearSubTasks(taskManager);
+            System.out.println(" ");
 
-        clearEpics(taskManager);
-        System.out.println(" ");
+            createEpicsAndSubTasks(taskManager);
+            System.out.println(" ");
 
-        createTasks(taskManager);
-        System.out.println(" ");
+            clearEpics(taskManager);
+            System.out.println(" ");
 
-        createEpicsAndSubTasks(taskManager);
-        System.out.println(" ");
+            createTasks(taskManager);
+            System.out.println(" ");
+
+            createEpicsAndSubTasks(taskManager);
+            System.out.println(" ");
+
+
+            updateStatuses(taskManager);
+            System.out.println(" ");
+
+        }
 
         checkHistory(taskManager);
         System.out.println(" ");
 
-        updateStatuses(taskManager);
+
+        getResult(taskManager);
         System.out.println("Окончание проверки");
 
     }
@@ -207,5 +216,18 @@ public class Main {
         taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
         taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
         System.out.println(taskManager.getHistory());
+    }
+
+    public static void getResult(TaskManager taskManager) {
+        System.out.println("Задания после всех проверок");
+        for (Task task : taskManager.getAllTasks()) {
+            System.out.println("Task "+task.toString());
+        }
+        for (Epic task : taskManager.getAllEpic()) {
+            System.out.println("Epic "+task.toString());
+        }
+        for (SubTask task : taskManager.getAllSubTasks()) {
+            System.out.println("SubTask "+task.toString());
+        }
     }
 }

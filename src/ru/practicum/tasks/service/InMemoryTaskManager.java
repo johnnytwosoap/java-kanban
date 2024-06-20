@@ -14,6 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     Managers managers = new Managers();
     HistoryManager inMemoryHistoryManager = managers.getDefaultHistory();
+    Boolean created;
     public static int id = 0;
 
     private Map<Integer, Task> tasks = new HashMap<>();
@@ -203,5 +204,10 @@ public class InMemoryTaskManager implements TaskManager {
             inMemoryHistoryManager.remove(epicId);
         }
         epics.clear();
+    }
+
+    @Override
+    public Boolean getCreated(){
+        return created;
     }
 }
