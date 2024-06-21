@@ -8,8 +8,6 @@ import ru.practicum.tasks.model.TaskStatus;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -51,7 +49,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         break;
                     }
                     case "Epic": {
-                        super.reloadEpic(new Epic(taskLine[2] , taskLine[2]), Integer.parseInt(taskLine[0]), TaskStatus.valueOf(taskLine[4]));
+                        super.reloadEpic(new Epic(taskLine[2], taskLine[2]), Integer.parseInt(taskLine[0]), TaskStatus.valueOf(taskLine[4]));
                         break;
                     }
                     case "SubTask": {
