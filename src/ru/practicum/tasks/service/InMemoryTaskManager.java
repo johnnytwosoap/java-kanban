@@ -158,7 +158,6 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(id);
         epics.put(id, epic);
         return epic;
-
     }
 
     @Override
@@ -209,5 +208,28 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Boolean getCreated() {
         return created;
+    }
+
+    protected void reloadTask(Task task, int taskId) {
+        id = taskId;
+        task.setId(taskId);
+        tasks.put(taskId, task);
+    }
+
+    protected void reloadEpic(Epic epic, int epicId, TaskStatus status) {
+        id = epicId;
+        epic.setId(epicId);
+        epic.setStatus(status);
+        epics.put(epicId, epic);
+    }
+
+    protected void reloadSubTask(SubTask subTask, int subTaskId) {
+        if (epics.containsKey(subTask.getEpicId())) {
+            id = subTaskId;
+            subTask.setId(subTaskId);
+            subtasks.put(subTaskId, subTask);
+            epics.get(subTask.getEpicId()).addSubTask(subTask);
+            checkEpicStatus(subTask.getEpicId());
+        }
     }
 }

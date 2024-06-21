@@ -13,13 +13,11 @@ import java.util.Map;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    private String filePathForManager;
+    private Path fileTasks;
     private Boolean created;
 
     public FileBackedTaskManager() {
-        filePathForManager = "static/tasks.csv";
-
-        Path fileTasks = Path.of(filePathForManager);
+        fileTasks = Path.of("static/tasks.csv");
         try {
             if (!Files.exists(fileTasks)) {
                 Files.createFile(fileTasks);
@@ -38,34 +36,26 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return created;
     }
 
-    public String getFilePathForManager() {
-        return filePathForManager;
+    public File getFilePathForManager() {
+        return fileTasks.toFile();
     }
 
     private void loadFromFile() {
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(filePathForManager))) {
-            Map<String, Integer> oldEpicsId = new HashMap<>();
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(fileTasks.toFile()))) {
+            fileReader.readLine();
             while (fileReader.ready()) {
                 String[] taskLine = fileReader.readLine().split(",");
-                TaskStatus status = TaskStatus.NEW;
-                if (taskLine[4] == TaskStatus.IN_PROGRESS.name()) {
-                    status = TaskStatus.IN_PROGRESS;
-                } else if (taskLine[4] == TaskStatus.DONE.name()) {
-                    status = TaskStatus.DONE;
-                }
                 switch (taskLine[1]) {
                     case "Task": {
-                        super.createTask(new Task(taskLine[2], taskLine[3], status));
+                        super.reloadTask(new Task(taskLine[2], taskLine[3], TaskStatus.valueOf(taskLine[4])), Integer.parseInt(taskLine[0]));
                         break;
                     }
                     case "Epic": {
-                        Epic savedEpic = super.createEpic(new Epic(taskLine[2], taskLine[2]));
-                        oldEpicsId.put(taskLine[0], savedEpic.getId());
+                        super.reloadEpic(new Epic(taskLine[2] , taskLine[2]), Integer.parseInt(taskLine[0]), TaskStatus.valueOf(taskLine[4]));
                         break;
                     }
                     case "SubTask": {
-                        SubTask subTask = new SubTask(taskLine[2], taskLine[3], status, oldEpicsId.get(taskLine[5]));
-                        super.createSubTask(subTask);
+                        super.reloadSubTask(new SubTask(taskLine[2], taskLine[3], TaskStatus.valueOf(taskLine[4]), Integer.parseInt(taskLine[5])), Integer.parseInt(taskLine[0]));
                         break;
                     }
                     default: {
@@ -93,13 +83,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task getTask(int id) {
-        Task task = super.getTask(id);
-        save();
-        return task;
-    }
-
-    @Override
     public void updateTask(Task task) {
         super.updateTask(task);
         save();
@@ -122,13 +105,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void deleteSubTask(int id) {
         super.deleteSubTask(id);
         save();
-    }
-
-    @Override
-    public SubTask getSubTask(int id) {
-        SubTask subTask = super.getSubTask(id);
-        save();
-        return subTask;
     }
 
     @Override
@@ -158,13 +134,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Epic getEpic(int id) {
-        Epic epic = super.getEpic(id);
-        save();
-        return epic;
-    }
-
-    @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
         save();
@@ -177,7 +146,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private void save() {
-        try (Writer fileWriter = new FileWriter(filePathForManager)) {
+        try (Writer fileWriter = new FileWriter(fileTasks.toFile())) {
             fileWriter.write("id,type,name,status,description,epic\n");
             for (Task task : super.getAllTasks()) {
                 fileWriter.write(task.toFile() + "\n");
