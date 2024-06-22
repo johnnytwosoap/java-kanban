@@ -14,8 +14,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private Path fileTasks;
     private Boolean created;
 
-    public FileBackedTaskManager() {
-        fileTasks = Path.of("static/tasks.csv");
+    public FileBackedTaskManager(String fiePath) {
+        fileTasks = Path.of(fiePath);
         try {
             if (!Files.exists(fileTasks)) {
                 Files.createFile(fileTasks);

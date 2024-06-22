@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileBackedTaskManagerTest {
 
-    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
+    FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager("static/taskstest.csv");
 
     @Test
     void checkTaskInFile() {

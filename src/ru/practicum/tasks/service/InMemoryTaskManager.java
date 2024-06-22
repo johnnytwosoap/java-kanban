@@ -211,13 +211,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     protected void reloadTask(Task task, int taskId) {
-        id = taskId;
+        reloadId(taskId);
         task.setId(taskId);
         tasks.put(taskId, task);
     }
 
     protected void reloadEpic(Epic epic, int epicId, TaskStatus status) {
-        id = epicId;
+        reloadId(epicId);
         epic.setId(epicId);
         epic.setStatus(status);
         epics.put(epicId, epic);
@@ -225,11 +225,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     protected void reloadSubTask(SubTask subTask, int subTaskId) {
         if (epics.containsKey(subTask.getEpicId())) {
-            id = subTaskId;
+            reloadId(subTaskId);
             subTask.setId(subTaskId);
             subtasks.put(subTaskId, subTask);
             epics.get(subTask.getEpicId()).addSubTask(subTask);
             checkEpicStatus(subTask.getEpicId());
+        }
+    }
+
+    private void reloadId(int newId) {
+        if (newId > id) {
+            id = newId;
         }
     }
 }

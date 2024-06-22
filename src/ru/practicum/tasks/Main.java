@@ -13,7 +13,8 @@ public class Main {
 
     public static void main(String[] args) {
         Managers managers = new Managers();
-        TaskManager taskManager = managers.getFileManager();
+        String filePath = "static/tasks.csv";
+        TaskManager taskManager = managers.getFileManager(filePath);
 
         System.out.println("Поехали!");
 
