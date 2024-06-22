@@ -17,4 +17,9 @@ public class SubTask extends Task {
     public String toString() {
         return "SubTask{id='" + id + "', taskName='" + taskName + "', description='" + description + "', epicId='" + epicId + "', status='" + status + "'}";
     }
+
+    @Override
+    public String toFile() {
+        return id + ",SubTask," + taskName + "," + description + "," + status + "," + epicId;
+    }
 }

@@ -48,4 +48,8 @@ public class Task {
     public String toString() {
         return "Task{id='" + id + "', taskName='" + taskName + "', description='" + description + "', status='" + status + "'}";
     }
+
+    public String toFile() {
+        return id + ",Task," + taskName + "," + description + "," + status;
+    }
 }

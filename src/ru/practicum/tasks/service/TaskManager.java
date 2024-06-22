@@ -47,4 +47,6 @@ public interface TaskManager {
     List<Epic> getAllEpic();
 
     void deleteAllEpics();
+
+    Boolean getCreated();
 }

@@ -40,4 +40,10 @@ public class Epic extends Task {
         }
     }
 
+
+    @Override
+    public String toFile() {
+        return id + ",Epic," + taskName + "," + description + "," + status;
+    }
+
 }

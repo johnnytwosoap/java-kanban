@@ -14,6 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     Managers managers = new Managers();
     HistoryManager inMemoryHistoryManager = managers.getDefaultHistory();
+    Boolean created;
     public static int id = 0;
 
     private Map<Integer, Task> tasks = new HashMap<>();
@@ -157,7 +158,6 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(id);
         epics.put(id, epic);
         return epic;
-
     }
 
     @Override
@@ -203,5 +203,39 @@ public class InMemoryTaskManager implements TaskManager {
             inMemoryHistoryManager.remove(epicId);
         }
         epics.clear();
+    }
+
+    @Override
+    public Boolean getCreated() {
+        return created;
+    }
+
+    protected void reloadTask(Task task, int taskId) {
+        reloadId(taskId);
+        task.setId(taskId);
+        tasks.put(taskId, task);
+    }
+
+    protected void reloadEpic(Epic epic, int epicId, TaskStatus status) {
+        reloadId(epicId);
+        epic.setId(epicId);
+        epic.setStatus(status);
+        epics.put(epicId, epic);
+    }
+
+    protected void reloadSubTask(SubTask subTask, int subTaskId) {
+        if (epics.containsKey(subTask.getEpicId())) {
+            reloadId(subTaskId);
+            subTask.setId(subTaskId);
+            subtasks.put(subTaskId, subTask);
+            epics.get(subTask.getEpicId()).addSubTask(subTask);
+            checkEpicStatus(subTask.getEpicId());
+        }
+    }
+
+    private void reloadId(int newId) {
+        if (newId > id) {
+            id = newId;
+        }
     }
 }
