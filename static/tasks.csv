@@ -1,8 +1,0 @@
-id,type,name,status,description,epic
-25,Task,first task,firstTask description,DONE,29-06-2024 03:04:05,30
-26,Task,second task,secondTask description,IN_PROGRESS,null,0
-27,Epic,first epic,firstEpic description,DONE,28-06-2024 03:04:05,10
-29,Epic,second epic,secondEpic description,DONE,28-06-2024 02:03:15,5
-28,SubTask,first subtask,firstSubTask description,DONE,28-06-2024 03:04:05,10,27
-30,SubTask,second subtask,secondSubTask description,DONE,28-06-2024 02:03:15,5,29
-31,SubTask,third subtask,thirdSubTask description,DONE,null,0,29
