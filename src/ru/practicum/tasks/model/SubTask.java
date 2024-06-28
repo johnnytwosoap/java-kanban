@@ -11,6 +11,11 @@ public class SubTask extends Task {
         this.epicId = epicId;
     }
 
+    public SubTask(String taskName, String description, TaskStatus status, int epicId) {
+        super(taskName, description, status);
+        this.epicId = epicId;
+    }
+
     public Integer getEpicId() {
         return this.epicId;
     }
@@ -27,9 +32,13 @@ public class SubTask extends Task {
     @Override
     public String toFile() {
         String startTimeFormatted = "null";
+        String durationToMinutes = "null";
         if (startTime != null) {
             startTimeFormatted = startTime.format(formatter);
         }
-        return id + ",SubTask," + taskName + "," + description + "," + status + "," + startTimeFormatted + "," + duration.toMinutes() + "," + epicId;
+        if (duration != null) {
+            durationToMinutes = String.valueOf(duration.toMinutes());
+        }
+        return id + ",SubTask," + taskName + "," + description + "," + status + "," + startTimeFormatted + "," + durationToMinutes + "," + epicId;
     }
 }

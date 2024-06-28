@@ -8,8 +8,12 @@ import java.util.List;
 public class Epic extends Task {
     private List<Integer> subTasks = new ArrayList<>();
 
+    private LocalDateTime startTime;
+    private Duration duration;
+    private LocalDateTime endTime;
+
     public Epic(String taskName, String description) {
-        super(taskName, description, TaskStatus.NEW, null, 0);
+        super(taskName, description, TaskStatus.NEW);
     }
 
     public void addSubTask(SubTask subTask) {
@@ -20,6 +24,29 @@ public class Epic extends Task {
         return this.subTasks;
     }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return this.endTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public Duration getDuration() {
+        return this.duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return this.startTime;
+    }
 
     public void removeSubTasks() {
         this.subTasks.clear();
@@ -27,14 +54,6 @@ public class Epic extends Task {
 
     public void removeSubTask(Integer subTaskId) {
         this.subTasks.remove(subTaskId);
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
     }
 
     @Override
@@ -58,10 +77,14 @@ public class Epic extends Task {
     @Override
     public String toFile() {
         String startTimeFormatted = "null";
+        String durationToMinutes = "null";
         if (startTime != null) {
             startTimeFormatted = startTime.format(formatter);
         }
-        return id + ",Epic," + taskName + "," + description + "," + status + "," + startTimeFormatted + "," + duration.toMinutes();
+        if (duration != null) {
+            durationToMinutes = String.valueOf(duration.toMinutes());
+        }
+        return id + ",Epic," + taskName + "," + description + "," + status + "," + startTimeFormatted + "," + durationToMinutes;
     }
 
 }

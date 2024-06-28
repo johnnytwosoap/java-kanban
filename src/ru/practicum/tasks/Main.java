@@ -104,7 +104,7 @@ public class Main {
         Epic epic2 = new Epic("second epic","secondEpic description");
         Epic secondEpic = taskManager.createEpic(epic2);
 
-        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.getId(), LocalDateTime.parse("28-06-2024 03:03:15", formatter), 5);
+        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.getId(), LocalDateTime.parse("28-06-2024 02:03:15", formatter), 5);
         SubTask secondSubTask = taskManager.createSubTask(subTask2);
         System.out.println("Вторая подзадача " + secondSubTask.toString());
 

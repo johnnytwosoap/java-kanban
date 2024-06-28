@@ -84,7 +84,7 @@ class EpicTest {
         taskManager.createSubTask(subTaskThird);
 
         assertEquals(savedEpic.getStartTime(), secondTaskStartTime, "Время начала эпика не совпадает");
-        assertEquals(savedEpic.getDuration(), Duration.between(secondTaskStartTime, firstTaskStartTime.plus(Duration.ofMinutes(30))), "Продолжительность эпика не совпадает");
+        assertEquals(savedEpic.getDuration(), Duration.ofMinutes(50), "Продолжительность эпика не совпадает");
         assertEquals(savedEpic.getEndTime(), firstTaskStartTime.plus(Duration.ofMinutes(30)), "Время окончания эпика не совпадает");
     }
 
