@@ -4,12 +4,15 @@ import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.InMemoryTaskManager;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TaskTest {
+
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
     @Test
@@ -44,9 +47,11 @@ class TaskTest {
 
     @Test
     void checkClearAllTask() {
-        Task taskFirst = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, LocalDateTime.now(), 20);
+        LocalDateTime firstTaskTime = LocalDateTime.parse("27-06-1999 15:30:45", formatter);
+        LocalDateTime secondTaskTime = LocalDateTime.parse("27-06-2000 16:30:45", formatter);
+        Task taskFirst = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, firstTaskTime, 20);
         taskManager.createTask(taskFirst);
-        Task taskSecond = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, LocalDateTime.now(), 20);
+        Task taskSecond = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, secondTaskTime, 20);
         taskManager.createTask(taskSecond);
         final List<Task> tasks = taskManager.getAllTasks();
         assertEquals(2, tasks.size(), "Неверное количество задач.");

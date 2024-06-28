@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
 
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
     @Test
@@ -34,11 +35,13 @@ class EpicTest {
 
     @Test
     void checkRemovingEpic() {
+        LocalDateTime firstTaskTime = LocalDateTime.parse("27-06-1999 15:30:45", formatter);
+        LocalDateTime secondTaskTime = LocalDateTime.parse("27-06-2000 16:30:45", formatter);
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final int epicId = taskManager.createEpic(epic).getId();
-        SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, LocalDateTime.now(), 20);
+        SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, firstTaskTime, 20);
         taskManager.createSubTask(subTaskFirst);
-        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, LocalDateTime.now(), 20);
+        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, secondTaskTime, 20);
         taskManager.createSubTask(subTaskSecond);
 
         final List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epicId);
@@ -69,20 +72,20 @@ class EpicTest {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         Epic savedEpic = taskManager.createEpic(epic);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        LocalDateTime firstSubTaskStartTime = LocalDateTime.parse("29-06-2024 03:04:05", formatter);
-        LocalDateTime secondSubTaskStartTime = LocalDateTime.parse("27-06-2024 03:04:03", formatter);
-        LocalDateTime thirdSubTaskStartTime = LocalDateTime.parse("28-06-2024 03:04:23", formatter);
+        LocalDateTime firstTaskStartTime = LocalDateTime.parse("29-06-2024 03:04:05", formatter);
+        LocalDateTime secondTaskStartTime = LocalDateTime.parse("27-06-2024 03:04:03", formatter);
+        LocalDateTime thirdTaskStartTime = LocalDateTime.parse("28-06-2024 03:04:23", formatter);
 
-        SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, savedEpic.getId(), firstSubTaskStartTime, 30);
+        SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, savedEpic.getId(), firstTaskStartTime, 30);
         taskManager.createSubTask(subTaskFirst);
-        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, savedEpic.getId(), secondSubTaskStartTime, 10);
+        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, savedEpic.getId(), secondTaskStartTime, 10);
         taskManager.createSubTask(subTaskSecond);
-        SubTask subTaskThird = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, savedEpic.getId(), thirdSubTaskStartTime, 10);
+        SubTask subTaskThird = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, savedEpic.getId(), thirdTaskStartTime, 10);
         taskManager.createSubTask(subTaskThird);
 
-        assertEquals(savedEpic.getStartTime(), secondSubTaskStartTime, "Время начала эпика не совпадает");
-        assertEquals(savedEpic.getDuration(), Duration.between(secondSubTaskStartTime, firstSubTaskStartTime.plus(Duration.ofMinutes(30))), "Продолжительность эпика не совпадает");
-        assertEquals(savedEpic.getEndTime(), firstSubTaskStartTime.plus(Duration.ofMinutes(30)), "Время окончания эпика не совпадает");
+        assertEquals(savedEpic.getStartTime(), secondTaskStartTime, "Время начала эпика не совпадает");
+        assertEquals(savedEpic.getDuration(), Duration.between(secondTaskStartTime, firstTaskStartTime.plus(Duration.ofMinutes(30))), "Продолжительность эпика не совпадает");
+        assertEquals(savedEpic.getEndTime(), firstTaskStartTime.plus(Duration.ofMinutes(30)), "Время окончания эпика не совпадает");
     }
 
 
