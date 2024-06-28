@@ -84,6 +84,6 @@ public class Task {
         if (startTime != null) {
             startTimeFormatted = startTime.format(formatter);
         }
-        return id + ",Task," + taskName + "," + description + "," + status + "," + startTimeFormatted + "," + duration.toMinutes() ;
+        return id + ",Task," + taskName + "," + description + "," + status + "," + startTimeFormatted + "," + duration.toMinutes();
     }
 }
