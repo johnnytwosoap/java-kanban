@@ -8,6 +8,8 @@ import ru.practicum.tasks.model.TaskStatus;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -43,17 +45,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             fileReader.readLine();
             while (fileReader.ready()) {
                 String[] taskLine = fileReader.readLine().split(",");
+                LocalDateTime dateTime = null;
+                if (!taskLine[5].equals("null")) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    dateTime = LocalDateTime.parse(taskLine[5], formatter);
+                }
                 switch (taskLine[1]) {
                     case "Task": {
-                        super.reloadTask(new Task(taskLine[2], taskLine[3], TaskStatus.valueOf(taskLine[4])), Integer.parseInt(taskLine[0]));
+                        super.reloadTask(new Task(taskLine[2], taskLine[3], TaskStatus.valueOf(taskLine[4]), dateTime, Integer.parseInt(taskLine[6])), Integer.parseInt(taskLine[0]));
                         break;
                     }
                     case "Epic": {
-                        super.reloadEpic(new Epic(taskLine[2], taskLine[2]), Integer.parseInt(taskLine[0]), TaskStatus.valueOf(taskLine[4]));
+                        super.reloadEpic(new Epic(taskLine[2], taskLine[2]), Integer.parseInt(taskLine[0]), TaskStatus.valueOf(taskLine[4]), dateTime, Integer.parseInt(taskLine[6]));
                         break;
                     }
                     case "SubTask": {
-                        super.reloadSubTask(new SubTask(taskLine[2], taskLine[3], TaskStatus.valueOf(taskLine[4]), Integer.parseInt(taskLine[5])), Integer.parseInt(taskLine[0]));
+                        super.reloadSubTask(new SubTask(taskLine[2], taskLine[3], TaskStatus.valueOf(taskLine[4]), Integer.parseInt(taskLine[7]), dateTime, Integer.parseInt(taskLine[6])), Integer.parseInt(taskLine[0]));
                         break;
                     }
                     default: {
@@ -70,7 +77,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public Task createTask(Task task) {
         Task savedTask = super.createTask(task);
-        save();
+        if (savedTask.getId() != 0 ||  savedTask.getId() != null) {
+            save();
+        }
         return savedTask;
     }
 
@@ -81,9 +90,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
-        super.updateTask(task);
-        save();
+    public Task updateTask(Task task) {
+        Task savedTask = super.updateTask(task);
+        if (savedTask.getId() != 0 ||  savedTask.getId() != null) {
+            save();
+        }
+        return savedTask;
     }
 
     @Override
@@ -94,9 +106,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public SubTask createSubTask(SubTask subTask) {
-        SubTask savedSubTask = super.createSubTask(subTask);
-        save();
-        return savedSubTask;
+        SubTask savedTask = super.createSubTask(subTask);
+        if (savedTask.getId() != 0 ||  savedTask.getId() != null) {
+            save();
+        }
+        return savedTask;
     }
 
     @Override
@@ -112,17 +126,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateSubTask(SubTask subTask) {
+    public SubTask updateSubTask(SubTask subTask) {
         super.updateSubTask(subTask);
         save();
+        return subTask;
     }
 
 
     @Override
     public Epic createEpic(Epic epic) {
-        Epic savedEpic = super.createEpic(epic);
-        save();
-        return savedEpic;
+        Epic savedTask = super.createEpic(epic);
+        if (savedTask.getId() != 0 ||  savedTask.getId() != null) {
+            save();
+        }
+        return savedTask;
     }
 
     @Override
@@ -132,9 +149,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateEpic(Epic epic) {
-        super.updateEpic(epic);
-        save();
+    public Epic updateEpic(Epic epic) {
+        Epic savedTask = super.updateEpic(epic);
+        if (savedTask.getId() != 0 ||  savedTask.getId() != null) {
+            save();
+        }
+        return savedTask;
     }
 
     @Override
@@ -146,16 +166,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void save() {
         try (Writer fileWriter = new FileWriter(fileTasks.toFile())) {
             fileWriter.write("id,type,name,status,description,epic\n");
-            for (Task task : super.getAllTasks()) {
-                fileWriter.write(task.toFile() + "\n");
-            }
-            for (Epic epic : super.getAllEpic()) {
-                fileWriter.write(epic.toFile() + "\n");
-            }
-            for (SubTask subTask : super.getAllSubTasks()) {
-                fileWriter.write(subTask.toFile() + "\n");
-            }
+            super.getAllTasks().stream().map(task -> task.toFile() + "\n").forEach(taskToFile -> saveLine(fileWriter, taskToFile));
+            super.getAllEpic().stream().map(epic -> epic.toFile() + "\n").forEach(epicToFile -> saveLine(fileWriter, epicToFile));
+            super.getAllSubTasks().stream().map(subTask -> subTask.toFile() + "\n").forEach(subTaskToFile -> saveLine(fileWriter, subTaskToFile));
         } catch (IOException exc) {
+            throw new ManagerSaveException("Ошибка сохранения информации");
+        }
+    }
+
+    private void saveLine(Writer fileWriter, String taskToFile) {
+        try {
+            fileWriter.write(taskToFile);
+        } catch (IOException exception) {
             throw new ManagerSaveException("Ошибка сохранения информации");
         }
     }

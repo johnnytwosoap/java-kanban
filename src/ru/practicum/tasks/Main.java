@@ -7,11 +7,15 @@ import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.Managers;
 import ru.practicum.tasks.service.TaskManager;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Main {
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     public static void main(String[] args) {
+
         Managers managers = new Managers();
         String filePath = "static/tasks.csv";
         TaskManager taskManager = managers.getFileManager(filePath);
@@ -79,8 +83,8 @@ public class Main {
 
     public static void createTasks(TaskManager taskManager) {
         System.out.println("Создаем две задачи");
-        Task task1 = new Task("first task","firstTask description", TaskStatus.IN_PROGRESS);
-        Task task2 = new Task("second task","secondTask description", TaskStatus.DONE);
+        Task task1 = new Task("first task","firstTask description", TaskStatus.IN_PROGRESS, LocalDateTime.parse("29-06-2024 03:04:05", formatter), 30);
+        Task task2 = new Task("second task","secondTask description", TaskStatus.DONE, null, 0);
         Task firstTask = taskManager.createTask(task1);
         Task secondTask = taskManager.createTask(task2);
         System.out.println("Первая задача " + firstTask.toString());
@@ -93,18 +97,18 @@ public class Main {
         Epic epic1 = new Epic("first epic","firstEpic description");
         Epic firstEpic = taskManager.createEpic(epic1);
         System.out.println("Первый эпик без подзадач " + firstEpic.toString());
-        SubTask subTask1 = new SubTask("first subtask", "firstSubTask description", TaskStatus.DONE, firstEpic.getId());
+        SubTask subTask1 = new SubTask("first subtask", "firstSubTask description", TaskStatus.DONE, firstEpic.getId(), LocalDateTime.parse("28-06-2024 03:04:05", formatter), 10);
         SubTask firstSubTask = taskManager.createSubTask(subTask1);
         System.out.println("Первая подзадача " + firstSubTask.toString());
 
         Epic epic2 = new Epic("second epic","secondEpic description");
         Epic secondEpic = taskManager.createEpic(epic2);
 
-        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.getId());
+        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.getId(), LocalDateTime.parse("28-06-2024 03:03:15", formatter), 5);
         SubTask secondSubTask = taskManager.createSubTask(subTask2);
         System.out.println("Вторая подзадача " + secondSubTask.toString());
 
-        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.getId());
+        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.getId(), null , 0);
         SubTask thirdSubTask = taskManager.createSubTask(subTask3);
         System.out.println("Третья подзадача " + thirdSubTask.toString());
         System.out.println("Первый эпик c подзадачами " + firstEpic);
@@ -229,6 +233,11 @@ public class Main {
         }
         for (SubTask task : taskManager.getAllSubTasks()) {
             System.out.println("SubTask " + task.toString());
+        }
+        System.out.println("Задания после всех проверок по приоритету");
+        for (Object task : taskManager.getPrioritizedTasks()) {
+            System.out.println(task.toString());
+
         }
     }
 }

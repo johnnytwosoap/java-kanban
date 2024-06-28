@@ -3,6 +3,7 @@ import ru.practicum.tasks.model.Task;
 import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.InMemoryTaskManager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +14,7 @@ class TaskTest {
 
     @Test
     void addNewTask() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
+        Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, LocalDateTime.now(), 20);
         final int taskId = taskManager.createTask(task).getId();
 
         final Task savedTask = taskManager.getTask(taskId);
@@ -31,7 +32,7 @@ class TaskTest {
 
     @Test
     void checkRemovingTask() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
+        Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, LocalDateTime.now(), 20);
         final int taskId = taskManager.createTask(task).getId();
         final List<Task> tasks = taskManager.getAllTasks();
         assertEquals(1, tasks.size(), "Неверное количество задач.");
@@ -43,9 +44,9 @@ class TaskTest {
 
     @Test
     void checkClearAllTask() {
-        Task taskFirst = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
+        Task taskFirst = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, LocalDateTime.now(), 20);
         taskManager.createTask(taskFirst);
-        Task taskSecond = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
+        Task taskSecond = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW, LocalDateTime.now(), 20);
         taskManager.createTask(taskSecond);
         final List<Task> tasks = taskManager.getAllTasks();
         assertEquals(2, tasks.size(), "Неверное количество задач.");
