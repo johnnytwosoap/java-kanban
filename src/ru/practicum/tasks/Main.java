@@ -108,7 +108,7 @@ public class Main {
         SubTask secondSubTask = taskManager.createSubTask(subTask2);
         System.out.println("Вторая подзадача " + secondSubTask.toString());
 
-        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.getId(), null , 0);
+        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.getId(), null, 0);
         SubTask thirdSubTask = taskManager.createSubTask(subTask3);
         System.out.println("Третья подзадача " + thirdSubTask.toString());
         System.out.println("Первый эпик c подзадачами " + firstEpic);
