@@ -208,7 +208,6 @@ public class Main {
     public static void checkHistory(TaskManager taskManager) {
         System.out.println("Проверяем историю обращений");
         taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
-        //taskManager.deleteTask(taskManager.getAllTasks().getFirst().getId());
         taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
         taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
         taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
