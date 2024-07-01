@@ -4,6 +4,8 @@ import ru.practicum.tasks.model.SubTask;
 import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.InMemoryTaskManager;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,13 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SubTaskTest {
 
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
     @Test
     void addNewSubTask() {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final int epicId = taskManager.createEpic(epic).getId();
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, LocalDateTime.now(), 20);
         final int subTaskId = taskManager.createSubTask(subTask).getId();
 
         final SubTask savedSubTask = taskManager.getSubTask(subTaskId);
@@ -34,7 +37,7 @@ class SubTaskTest {
 
     @Test
     void addNewSubTaskWithWrongEpic() {
-        new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, 4);
+        new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, 4, LocalDateTime.now(), 20);
 
         final List<SubTask> subTasks = taskManager.getAllSubTasks();
 
@@ -45,7 +48,7 @@ class SubTaskTest {
     void checkRemovingSubTask() {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final int epicId = taskManager.createEpic(epic).getId();
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, LocalDateTime.now(), 20);
         final int subTaskId = taskManager.createSubTask(subTask).getId();
 
         final List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epicId);
@@ -58,11 +61,13 @@ class SubTaskTest {
 
     @Test
     void checkClearAllSubTask() {
+        LocalDateTime firstTaskTime = LocalDateTime.parse("27-06-1999 15:30:45", formatter);
+        LocalDateTime secondTaskTime = LocalDateTime.parse("27-06-2000 16:30:45", formatter);
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final int epicId = taskManager.createEpic(epic).getId();
-        SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTaskFirst = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, firstTaskTime, 20);
         taskManager.createSubTask(subTaskFirst);
-        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId);
+        SubTask subTaskSecond = new SubTask("Test addNewSubTask", "Test addNewSubTask description", TaskStatus.NEW, epicId, secondTaskTime, 20);
         taskManager.createSubTask(subTaskSecond);
 
         final List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epicId);

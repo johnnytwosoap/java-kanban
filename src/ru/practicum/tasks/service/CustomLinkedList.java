@@ -10,8 +10,6 @@ public class CustomLinkedList<T> {
     private Node<T> head;
     private Node<T> tail;
 
-    private int size = 0;
-
     public List<T> getTasks() {
         List<T> tasks = new ArrayList<>();
         Node<T> listHead = head;
@@ -30,7 +28,6 @@ public class CustomLinkedList<T> {
             tail.setNext(newNode);
         }
         tail = newNode;
-        size++;
         return newNode;
     }
 
@@ -55,7 +52,6 @@ public class CustomLinkedList<T> {
             taskTail.setPrev(taskHead);
         }
         task.setData(null);
-        size--;
     }
 
 }

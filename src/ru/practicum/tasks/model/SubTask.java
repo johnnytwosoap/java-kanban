@@ -1,8 +1,15 @@
 package ru.practicum.tasks.model;
 
+import java.time.LocalDateTime;
+
 public class SubTask extends Task {
 
     private Integer epicId;
+
+    public SubTask(String taskName, String description, TaskStatus status, int epicId, LocalDateTime startTime, int duration) {
+        super(taskName, description, status, startTime, duration);
+        this.epicId = epicId;
+    }
 
     public SubTask(String taskName, String description, TaskStatus status, int epicId) {
         super(taskName, description, status);
@@ -15,11 +22,23 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask{id='" + id + "', taskName='" + taskName + "', description='" + description + "', epicId='" + epicId + "', status='" + status + "'}";
+        String startTimeFormatted = "null";
+        if (startTime != null) {
+            startTimeFormatted = startTime.format(formatter);
+        }
+        return "SubTask{id='" + id + "', taskName='" + taskName + "', description='" + description + "', epicId='" + epicId + "', status='" + status + "', startTime='" + startTimeFormatted + "', duration='" + duration.toMinutes() + "'}";
     }
 
     @Override
     public String toFile() {
-        return id + ",SubTask," + taskName + "," + description + "," + status + "," + epicId;
+        String startTimeFormatted = "null";
+        String durationToMinutes = "null";
+        if (startTime != null) {
+            startTimeFormatted = startTime.format(formatter);
+        }
+        if (duration != null) {
+            durationToMinutes = String.valueOf(duration.toMinutes());
+        }
+        return id + ",SubTask," + taskName + "," + description + "," + status + "," + startTimeFormatted + "," + durationToMinutes + "," + epicId;
     }
 }
