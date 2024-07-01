@@ -73,7 +73,7 @@ public class Task {
     }
 
     public void setDuration(Duration duration) {
-        this.duration=duration;
+        this.duration = duration;
     }
 
     public LocalDateTime getEndTime() {
