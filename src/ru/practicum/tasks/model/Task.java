@@ -72,6 +72,10 @@ public class Task {
         return this.duration;
     }
 
+    public void setDuration(Duration duration) {
+        this.duration=duration;
+    }
+
     public LocalDateTime getEndTime() {
         if (startTime == null) {
             return null;

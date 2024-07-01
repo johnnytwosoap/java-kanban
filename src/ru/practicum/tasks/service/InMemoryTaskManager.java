@@ -130,6 +130,7 @@ public class InMemoryTaskManager implements TaskManager {
             } else {
                 epic.setStartTime(null);
                 epic.setDuration(null);
+                epic.setEndTime(null);
             }
         }
     }
@@ -160,10 +161,10 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtasks.containsKey(id)) {
             epics.get(subtasks.get(id).getEpicId()).removeSubTask(id);
             checkEpicStatus(subtasks.get(id).getEpicId());
+            removePrioritizedTasks(subtasks.get(id));
+            inMemoryHistoryManager.remove(id);
+            subtasks.remove(id);
         }
-        removePrioritizedTasks(subtasks.get(id));
-        inMemoryHistoryManager.remove(id);
-        subtasks.remove(id);
     }
 
     @Override
@@ -197,9 +198,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic createEpic(Epic epic) {
-        if (!checkTime(epic)) {
-            throw new NotValidTaskException(epic.toString());
-        }
         id += 1;
         epic.setId(id);
         epics.put(id, epic);
@@ -208,9 +206,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic updateEpic(Epic task) {
-        if (!checkTime(task)) {
-            throw new NotValidTaskException(task.toString());
-        }
         if (epics.containsKey(task.getId())) {
             Epic epic = epics.get(task.getId());
             epic.setDescription(task.getDescription());
