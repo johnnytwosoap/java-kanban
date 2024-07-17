@@ -12,6 +12,7 @@ public class SubTask extends Task {
         super(taskName, description, status, startTime, duration);
         this.epicId = epicId;
     }
+
     public SubTask(JsonObject jsonObject) {
         super(jsonObject.get("taskName").getAsString(),
                 jsonObject.get("description").getAsString(),
