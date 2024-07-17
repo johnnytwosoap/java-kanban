@@ -100,7 +100,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             JsonElement jsonElement = JsonParser.parseString(body);
-            if(!jsonElement.isJsonObject()) {
+            if (!jsonElement.isJsonObject()) {
                 writeResponse(exchange, "\"result\":\"Ошибка сохранения задания\"", 406);
                 return;
             }
@@ -137,7 +137,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
             JsonElement jsonElement = JsonParser.parseString(body);
-            if(!jsonElement.isJsonObject()) {
+            if (!jsonElement.isJsonObject()) {
                 writeResponse(exchange, "\"result\":\"Ошибка сохранения задания\"", 406);
                 return;
             }
@@ -187,7 +187,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
             JsonElement jsonElement = JsonParser.parseString(body);
-            if(!jsonElement.isJsonObject()) {
+            if (!jsonElement.isJsonObject()) {
                 writeResponse(exchange, "\"result\":\"Ошибка сохранения задания\"", 406);
                 return;
             }
