@@ -13,6 +13,7 @@ public class Epic extends Task {
     public Epic(String taskName, String description) {
         super(taskName, description, TaskStatus.NEW);
     }
+
     public Epic(JsonObject jsonObject) {
         super(jsonObject.get("taskName").getAsString(), jsonObject.get("description").getAsString(), TaskStatus.NEW);
     }
