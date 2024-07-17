@@ -28,6 +28,8 @@ public class HttpTaskManagerTest {
         TaskManager defaultManager = managers.getHttpTaskManager();
         HttpTaskClient httpTaskClient = new HttpTaskClient();
         HttpTaskServer httpTaskServer = new HttpTaskServer((HttpTaskManager) defaultManager, 8080);
+        defaultManager.deleteAllTasks();
+        defaultManager.deleteAllEpics();
 
         assertTrue(defaultManager.getAllTasks().isEmpty(), "Задача найдена.");
         assertTrue(defaultManager.getAllEpic().isEmpty(), "Задача найдена.");
