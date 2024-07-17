@@ -90,7 +90,7 @@ public class Main {
         Epic epic1 = new Epic("first epic","firstEpic description");
         String firstEpic = httpTaskClient.client("epics", epic1).replace("\\","");
         System.out.println("Первый эпик без подзадач " + firstEpic);
-        JsonElement jsonElement = JsonParser.parseString(firstEpic.substring(1,firstEpic.length()-1));
+        JsonElement jsonElement = JsonParser.parseString(firstEpic.substring(1, firstEpic.length() - 1));
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         Integer firstEpicId = jsonObject.get("id").getAsInt();
         SubTask subTask1 = new SubTask(
@@ -106,7 +106,7 @@ public class Main {
         Epic epic2 = new Epic("second epic","secondEpic description");
 
         String secondEpic = httpTaskClient.client("epics", epic2).replace("\\","");
-        JsonElement jsonElements = JsonParser.parseString(secondEpic.substring(1,secondEpic.length()-1));
+        JsonElement jsonElements = JsonParser.parseString(secondEpic.substring(1, secondEpic.length() - 1));
         JsonObject jsonObjects = jsonElements.getAsJsonObject();
         Integer secondEpicId = jsonObjects.get("id").getAsInt();
         SubTask subTask2 = new SubTask(
@@ -125,7 +125,7 @@ public class Main {
         System.out.println("Первый эпик c подзадачами " + firstEpic);
         String allSubTasks = httpTaskClient.clientGetDelete("subtasks","GET");
         System.out.println("Все подзадачи " + allSubTasks);
-        String allSubTasksByEpic = httpTaskClient.clientGetDelete("epics/"+secondEpicId+"/subtasks","GET");
+        String allSubTasksByEpic = httpTaskClient.clientGetDelete("epics/" + secondEpicId + "/subtasks","GET");
         System.out.println("Подзадачи второго эпика " + allSubTasksByEpic);
     }
 
@@ -141,12 +141,12 @@ public class Main {
                         .replace("}\"","}")
                         .split(";"))
                         .map(String::trim)
-                        .map(task->task.substring(1).replace("\\",""))
+                        .map(task -> task.substring(1).replace("\\",""))
                         .toList();
         System.out.println("Список задач до удаления" + allTasks);
         List<JsonObject> jsonObjects = allTasks.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
         for (JsonObject jsonObject: jsonObjects) {
-            httpTaskClient.clientGetDelete("tasks/"+jsonObject.get("id").getAsString(),"DELETE");
+            httpTaskClient.clientGetDelete("tasks/" + jsonObject.get("id").getAsString(),"DELETE");
         }
         String allTasksAfter = httpTaskClient.clientGetDelete("tasks/","GET");
         System.out.println("Список задач после удаления" + allTasksAfter);
@@ -165,7 +165,7 @@ public class Main {
         System.out.println("Список подзадач до удаления" + allTasks);
         List<JsonObject> jsonObjects = allTasks.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
         for (JsonObject jsonObject: jsonObjects) {
-            httpTaskClient.clientGetDelete("subtasks/"+jsonObject.get("id").getAsString(),"DELETE");
+            httpTaskClient.clientGetDelete("subtasks/" + jsonObject.get("id").getAsString(),"DELETE");
         }
 
         List<String> allTasksAfter = listStringResponse(httpTaskClient.clientGetDelete("subtasks","GET"));
@@ -176,7 +176,7 @@ public class Main {
         System.out.println("Удаляем эпики по очереди");
         List<JsonObject> jsonObjectsEpics = allEpics.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
         for (JsonObject jsonObject: jsonObjectsEpics) {
-            httpTaskClient.clientGetDelete("epics/"+jsonObject.get("id").getAsString(),"DELETE");
+            httpTaskClient.clientGetDelete("epics/" + jsonObject.get("id").getAsString(),"DELETE");
         }
         List<String> allEpicsafter = listStringResponse(httpTaskClient.clientGetDelete("epics","GET"));
         System.out.println("Список эпиков после удаления " + allEpicsafter);
@@ -190,7 +190,7 @@ public class Main {
                                 .replace("}\"","}")
                                 .split(";"))
                 .map(String::trim)
-                .map(task->task.substring(1).replace("\\",""))
+                .map(task -> task.substring(1).replace("\\",""))
                 .toList();
     }
 
@@ -200,7 +200,7 @@ public class Main {
         System.out.println("Список эпиков до удаления " + allEpics);
         List<JsonObject> jsonObjectsEpics = allEpics.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
         for (JsonObject jsonObject: jsonObjectsEpics) {
-            httpTaskClient.clientGetDelete("epics/"+jsonObject.get("id").getAsString(),"DELETE");
+            httpTaskClient.clientGetDelete("epics/" + jsonObject.get("id").getAsString(),"DELETE");
         }
         System.out.println("Список эпиков после удаления " + listStringResponse(httpTaskClient.clientGetDelete("epics","GET")));
         System.out.println("Список подзадач после удаления эпиков " + listStringResponse(httpTaskClient.clientGetDelete("subtasks","GET")));
@@ -243,7 +243,7 @@ public class Main {
         Epic epic = new Epic(jsonObjectsEpics.get(0));
         epic.setId(jsonObjectsEpics.get(0).get("id").getAsInt());
         System.out.println("Начальное состояние " + epic);
-        List<String> listStringsSubTasksByEpic = listStringResponse(httpTaskClient.clientGetDelete("epics/"+epic.getId()+"/subtasks","GET"));
+        List<String> listStringsSubTasksByEpic = listStringResponse(httpTaskClient.clientGetDelete("epics/" + epic.getId() + "/subtasks","GET"));
         List<JsonObject> jsonObjectsSubTasksByEpic = listStringsSubTasksByEpic.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
         SubTask subTask = new SubTask(jsonObjectsSubTasksByEpic.get(0));
         SubTask subTask1 = new SubTask(jsonObjectsSubTasksByEpic.get(1));
@@ -271,21 +271,21 @@ public class Main {
         List<String> listStringsEpics = listStringResponse(httpTaskClient.clientGetDelete("epics","GET"));
         List<JsonObject> jsonObjectsEpics = listStringsEpics.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
         Integer epicId = jsonObjectsEpics.get(0).get("id").getAsInt();
-        List<String> listStringsSubTasksByEpic = listStringResponse(httpTaskClient.clientGetDelete("epics/"+epicId+"/subtasks","GET"));
+        List<String> listStringsSubTasksByEpic = listStringResponse(httpTaskClient.clientGetDelete("epics/" + epicId + "/subtasks","GET"));
         List<JsonObject> jsonObjectsSubTasksByEpic = listStringsSubTasksByEpic.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
         Integer subtaskId = jsonObjectsSubTasksByEpic.get(0).get("id").getAsInt();
-        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
-        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
-        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
-        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
-        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
-        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
-        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
-        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
-        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
-        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
-        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
-        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
+        httpTaskClient.clientGetDelete("tasks/" + taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/" + subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/" + epicId,"GET");
+        httpTaskClient.clientGetDelete("tasks/" + taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/" + subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/" + epicId,"GET");
+        httpTaskClient.clientGetDelete("tasks/" + taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/" + subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/" + epicId,"GET");
+        httpTaskClient.clientGetDelete("tasks/" + taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/" + subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/" + epicId,"GET");
         System.out.println(listStringResponse(httpTaskClient.clientGetDelete("history","GET")));
     }
 
