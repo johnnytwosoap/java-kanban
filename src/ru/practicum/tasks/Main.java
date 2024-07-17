@@ -251,16 +251,16 @@ public class Main {
         subTask1.setId(jsonObjectsSubTasksByEpic.get(1).get("id").getAsInt());
         subTask.setStatus(TaskStatus.IN_PROGRESS);
         httpTaskClient.client("subtasks", subTask);
-        System.out.println("Одно подзадание статус в процессе " + httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
+        System.out.println("Одно подзадание статус в процессе " + httpTaskClient.clientGetDelete("epics/" + epic.getId(),"GET"));
         subTask.setStatus(TaskStatus.DONE);
         httpTaskClient.client("subtasks", subTask);
-        System.out.println("Одно подзадание статус сделано " +  httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
+        System.out.println("Одно подзадание статус сделано " +  httpTaskClient.clientGetDelete("epics/" + epic.getId(),"GET"));
         subTask1.setStatus(TaskStatus.IN_PROGRESS);
         httpTaskClient.client("subtasks", subTask1);
-        System.out.println("Сделано + в процессе " +  httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
+        System.out.println("Сделано + в процессе " +  httpTaskClient.clientGetDelete("epics/" + epic.getId(),"GET"));
         subTask1.setStatus(TaskStatus.DONE);
         httpTaskClient.client("subtasks", subTask1);
-        System.out.println("Два подзадания статус сделано " +  httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
+        System.out.println("Два подзадания статус сделано " +  httpTaskClient.clientGetDelete("epics/" + epic.getId(),"GET"));
     }
 
     public static void checkHistory(HttpTaskClient httpTaskClient) {
