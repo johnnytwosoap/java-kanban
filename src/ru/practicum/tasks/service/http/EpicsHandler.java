@@ -8,9 +8,11 @@ import java.util.Optional;
 
 public class EpicsHandler implements HttpHandler {
     public HttpTaskManager httpTaskManager;
+
     EpicsHandler(HttpTaskManager httpTaskManager) {
         this.httpTaskManager = httpTaskManager;
     }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         Optional<Integer> taskId = httpTaskManager.getId(exchange);

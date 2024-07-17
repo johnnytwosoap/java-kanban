@@ -8,9 +8,11 @@ import java.io.IOException;
 public class HistoryHandler  implements HttpHandler {
 
     public HttpTaskManager httpTaskManager;
+
     HistoryHandler(HttpTaskManager httpTaskManager) {
         this.httpTaskManager = httpTaskManager;
     }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         switch (exchange.getRequestMethod()) {
