@@ -27,7 +27,7 @@ public class Task {
     public Task(JsonObject jsonObject) {
         LocalDateTime localDateTime = null;
         if (!jsonObject.get("startTime").getAsString().equals("null")) {
-            localDateTime =LocalDateTime.parse(jsonObject.get("startTime").getAsString(), formatter);
+            localDateTime = LocalDateTime.parse(jsonObject.get("startTime").getAsString(), formatter);
         }
         this.taskName = jsonObject.get("taskName").getAsString();
         this.description = jsonObject.get("description").getAsString();

@@ -19,7 +19,7 @@ public class SubTask extends Task {
                 null,
                 jsonObject.get("duration").getAsInt());
         if (!jsonObject.get("startTime").getAsString().equals("null")) {
-            this.startTime =LocalDateTime.parse(jsonObject.get("startTime").getAsString(), formatter);
+            this.startTime = LocalDateTime.parse(jsonObject.get("startTime").getAsString(), formatter);
         }
         this.epicId = jsonObject.get("epicId").getAsInt();
     }
