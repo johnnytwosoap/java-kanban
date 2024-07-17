@@ -3,7 +3,6 @@ package ru.practicum.tasks.service.http;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import ru.practicum.tasks.model.Task;
 
 import java.io.IOException;

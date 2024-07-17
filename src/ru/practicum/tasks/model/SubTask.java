@@ -2,7 +2,6 @@ package ru.practicum.tasks.model;
 
 import com.google.gson.JsonObject;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class SubTask extends Task {
@@ -22,7 +21,6 @@ public class SubTask extends Task {
         if (!jsonObject.get("startTime").getAsString().equals("null")) {
             this.startTime =LocalDateTime.parse(jsonObject.get("startTime").getAsString(), formatter);
         }
-
         this.epicId = jsonObject.get("epicId").getAsInt();
     }
 

@@ -2,13 +2,8 @@ package ru.practicum.tasks.service.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.practicum.tasks.model.Task;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 
 public class HistoryHandler  implements HttpHandler {
 

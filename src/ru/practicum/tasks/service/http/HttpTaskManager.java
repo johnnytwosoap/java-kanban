@@ -1,22 +1,16 @@
 package ru.practicum.tasks.service.http;
 
-import com.google.gson.reflect.TypeToken;
 import com.sun.net.httpserver.HttpExchange;
-import ru.practicum.tasks.Main;
 import ru.practicum.tasks.model.Epic;
 import ru.practicum.tasks.model.SubTask;
 import ru.practicum.tasks.model.Task;
-import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.InMemoryTaskManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -47,10 +41,10 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void getAllTasks(HttpExchange exchange) throws IOException{
+    public void getAllTasks(HttpExchange exchange) throws IOException {
         try {
             List<Task> tasks = super.getAllTasks();
-            if (tasks.isEmpty()){
+            if (tasks.isEmpty()) {
                 writeResponse(exchange,"\"result\":\"Список заданий пуст\"", 200);
             } else {
                 writeResponse(exchange, tasks.stream().map(Task::toJson).collect(Collectors.toList()), 200);
@@ -60,7 +54,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void getTask(HttpExchange exchange, int id) throws IOException{
+    public void getTask(HttpExchange exchange, int id) throws IOException {
         try {
             Task task = super.getTask(id);
             if (task.getId() > 0) {

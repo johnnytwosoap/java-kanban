@@ -2,7 +2,6 @@ package ru.practicum.tasks.model;
 
 import com.google.gson.JsonObject;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

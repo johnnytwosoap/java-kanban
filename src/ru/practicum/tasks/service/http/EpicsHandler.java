@@ -4,8 +4,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+
 public class EpicsHandler implements HttpHandler {
     public HttpTaskManager httpTaskManager;
     EpicsHandler(HttpTaskManager httpTaskManager) {
