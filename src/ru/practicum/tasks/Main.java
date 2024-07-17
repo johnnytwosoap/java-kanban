@@ -1,128 +1,155 @@
 package ru.practicum.tasks;
 
+import com.google.gson.*;
 import ru.practicum.tasks.model.Epic;
 import ru.practicum.tasks.model.SubTask;
 import ru.practicum.tasks.model.Task;
 import ru.practicum.tasks.model.TaskStatus;
 import ru.practicum.tasks.service.Managers;
 import ru.practicum.tasks.service.TaskManager;
+import ru.practicum.tasks.service.http.HttpTaskClient;
+import ru.practicum.tasks.service.http.HttpTaskManager;
+import ru.practicum.tasks.service.http.HttpTaskServer;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    public static void main(String[] args) {
+    private static final int PORT = 8080;
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+    public static void main(String[] args) throws IOException {
+
 
         Managers managers = new Managers();
-        String filePath = "static/tasks.csv";
-        TaskManager taskManager = managers.getFileManager(filePath);
+        TaskManager taskManager = managers.getHttpTaskManager();
+        HttpTaskClient httpTaskClient = new HttpTaskClient();
+
+        HttpTaskServer httpTaskServer = new HttpTaskServer((HttpTaskManager) taskManager, PORT);
 
         System.out.println("Поехали!");
 
-        if (taskManager.getCreated()) {
+        createTasks(httpTaskClient);
+        System.out.println(" ");
 
-            createTasks(taskManager);
-            System.out.println(" ");
+        createEpicsAndSubTasks(httpTaskClient);
+        System.out.println(" ");
 
-            createEpicsAndSubTasks(taskManager);
-            System.out.println(" ");
+        deleteTasks(httpTaskClient);
+        System.out.println(" ");
 
-            deleteTasks(taskManager);
-            System.out.println(" ");
+        deleteSubTasksAndEpics(httpTaskClient);
+        System.out.println(" ");
 
-            createTasks(taskManager);
-            System.out.println(" ");
+        createEpicsAndSubTasks(httpTaskClient);
+        System.out.println(" ");
 
-            clearTasks(taskManager);
-            System.out.println(" ");
+        deleteEpicsAndSubTasks(httpTaskClient);
+        System.out.println(" ");
 
-            deleteSubTasksAndEpics(taskManager);
-            System.out.println(" ");
+        createTasks(httpTaskClient);
+        System.out.println(" ");
 
-            createEpicsAndSubTasks(taskManager);
-            System.out.println(" ");
+        createEpicsAndSubTasks(httpTaskClient);
+        System.out.println(" ");
 
-            deleteEpicsAndSubTasks(taskManager);
-            System.out.println(" ");
+        updateStatuses(httpTaskClient);
+        System.out.println(" ");
 
-            createEpicsAndSubTasks(taskManager);
-            System.out.println(" ");
+        checkHistory(httpTaskClient);
+        System.out.println(" ");
 
-            clearSubTasks(taskManager);
-            System.out.println(" ");
-
-            createEpicsAndSubTasks(taskManager);
-            System.out.println(" ");
-
-            clearEpics(taskManager);
-            System.out.println(" ");
-
-            createTasks(taskManager);
-            System.out.println(" ");
-
-            createEpicsAndSubTasks(taskManager);
-            System.out.println(" ");
-
-
-            updateStatuses(taskManager);
-            System.out.println(" ");
-
-
-            checkHistory(taskManager);
-            System.out.println(" ");
-        }
-
-
-        getResult(taskManager);
+        getResult(httpTaskClient);
         System.out.println("Окончание проверки");
+        httpTaskServer.stop();
 
     }
 
-    public static void createTasks(TaskManager taskManager) {
+    public static void createTasks(HttpTaskClient httpTaskClient) {
         System.out.println("Создаем две задачи");
-        Task task1 = new Task("first task","firstTask description", TaskStatus.IN_PROGRESS, LocalDateTime.parse("29-06-2024 03:04:05", formatter), 30);
+        Task task1 = new Task(
+                "first task",
+                "firstTask description",
+                TaskStatus.NEW,
+                LocalDateTime.of(2024,06,29,03,04,05),
+                30);
         Task task2 = new Task("second task","secondTask description", TaskStatus.DONE, null, 0);
-        Task firstTask = taskManager.createTask(task1);
-        Task secondTask = taskManager.createTask(task2);
-        System.out.println("Первая задача " + firstTask.toString());
-        System.out.println("Вторая задача " + secondTask.toString());
+        String firstTask = httpTaskClient.client("tasks", task1);
+        String secondTask = httpTaskClient.client("tasks", task2);
+        System.out.println("Первая задача " + firstTask);
+        System.out.println("Вторая задача " + secondTask);
     }
 
 
-    public static void createEpicsAndSubTasks(TaskManager taskManager) {
+    public static void createEpicsAndSubTasks(HttpTaskClient httpTaskClient) {
         System.out.println("Создаем два эпика с подзадачами");
         Epic epic1 = new Epic("first epic","firstEpic description");
-        Epic firstEpic = taskManager.createEpic(epic1);
-        System.out.println("Первый эпик без подзадач " + firstEpic.toString());
-        SubTask subTask1 = new SubTask("first subtask", "firstSubTask description", TaskStatus.DONE, firstEpic.getId(), LocalDateTime.parse("28-06-2024 03:04:05", formatter), 10);
-        SubTask firstSubTask = taskManager.createSubTask(subTask1);
-        System.out.println("Первая подзадача " + firstSubTask.toString());
+        String firstEpic = httpTaskClient.client("epics", epic1).replace("\\","");
+        System.out.println("Первый эпик без подзадач " + firstEpic);
+        JsonElement jsonElement = JsonParser.parseString(firstEpic.substring(1,firstEpic.length()-1));
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        Integer firstEpicId = jsonObject.get("id").getAsInt();
+        SubTask subTask1 = new SubTask(
+                "first subtask",
+                "firstSubTask description",
+                TaskStatus.DONE, firstEpicId,
+                LocalDateTime.parse("28-06-2024 03:04:05", formatter),
+                10);
+
+        String firstSubTask = httpTaskClient.client("subtasks", subTask1);
+        System.out.println("Первая подзадача " + firstSubTask);
 
         Epic epic2 = new Epic("second epic","secondEpic description");
-        Epic secondEpic = taskManager.createEpic(epic2);
 
-        SubTask subTask2 = new SubTask("second subtask", "secondSubTask description", TaskStatus.NEW, secondEpic.getId(), LocalDateTime.parse("28-06-2024 02:03:15", formatter), 5);
-        SubTask secondSubTask = taskManager.createSubTask(subTask2);
-        System.out.println("Вторая подзадача " + secondSubTask.toString());
+        String secondEpic = httpTaskClient.client("epics", epic2).replace("\\","");
+        JsonElement jsonElements = JsonParser.parseString(secondEpic.substring(1,secondEpic.length()-1));
+        JsonObject jsonObjects = jsonElements.getAsJsonObject();
+        Integer secondEpicId = jsonObjects.get("id").getAsInt();
+        SubTask subTask2 = new SubTask(
+                "second subtask",
+                "secondSubTask description",
+                TaskStatus.NEW, secondEpicId,
+                LocalDateTime.parse("28-06-2024 02:03:15", formatter),
+                5);
+        String secondSubTask = httpTaskClient.client("subtasks", subTask2);
+        System.out.println("Вторая подзадача " + secondSubTask);
 
-        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpic.getId(), null, 0);
-        SubTask thirdSubTask = taskManager.createSubTask(subTask3);
-        System.out.println("Третья подзадача " + thirdSubTask.toString());
+        SubTask subTask3 = new SubTask("third subtask", "thirdSubTask description", TaskStatus.NEW, secondEpicId, null, 0);
+
+        String thirdSubTask = httpTaskClient.client("subtasks", subTask3);
+        System.out.println("Третья подзадача " + thirdSubTask);
         System.out.println("Первый эпик c подзадачами " + firstEpic);
-        System.out.println("Все подзадачи " + taskManager.getAllSubTasks());
-        System.out.println("Подзадачи второго эпика " + taskManager.getAllSubTasksByEpic(secondEpic.getId()));
+        String allSubTasks = httpTaskClient.clientGetDelete("subtasks","GET");
+        System.out.println("Все подзадачи " + allSubTasks);
+        String allSubTasksByEpic = httpTaskClient.clientGetDelete("epics/"+secondEpicId+"/subtasks","GET");
+        System.out.println("Подзадачи второго эпика " + allSubTasksByEpic);
     }
 
-    public static void deleteTasks(TaskManager taskManager) {
+    public static void deleteTasks(HttpTaskClient httpTaskClient) {
         System.out.println("Удаляем задания по очереди");
-        System.out.println("Список задач до удаления" + taskManager.getAllTasks());
-        for (Task task: taskManager.getAllTasks()) {
-            taskManager.deleteTask(task.getId());
+        //System.out.println("Список задач до удаления" + taskManager.getAllTasks());
+        String response = httpTaskClient.clientGetDelete("tasks","GET");
+        List<String> allTasks = Arrays.stream(
+                        response
+                        .replace("[","")
+                        .replace("]","")
+                        .replace("}\",","};")
+                        .replace("}\"","}")
+                        .split(";"))
+                        .map(String::trim)
+                        .map(task->task.substring(1).replace("\\",""))
+                        .toList();
+        System.out.println("Список задач до удаления" + allTasks);
+        List<JsonObject> jsonObjects = allTasks.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        for (JsonObject jsonObject: jsonObjects) {
+            httpTaskClient.clientGetDelete("tasks/"+jsonObject.get("id").getAsString(),"DELETE");
         }
-        System.out.println("Список задач после удаления" + taskManager.getAllTasks());
+        String allTasksAfter = httpTaskClient.clientGetDelete("tasks/","GET");
+        System.out.println("Список задач после удаления" + allTasksAfter);
     }
 
     public static void clearTasks(TaskManager taskManager) {
@@ -132,30 +159,51 @@ public class Main {
         System.out.println("Список задач после удаления" + taskManager.getAllTasks());
     }
 
-    public static void deleteSubTasksAndEpics(TaskManager taskManager) {
+    public static void deleteSubTasksAndEpics(HttpTaskClient httpTaskClient) {
         System.out.println("Удаляем подзадания по очереди");
-        System.out.println("Список подзадач до удаления" + taskManager.getAllSubTasks());
-        for (SubTask task: taskManager.getAllSubTasks()) {
-            taskManager.deleteSubTask(task.getId());
+        List<String> allTasks = listStringResponse(httpTaskClient.clientGetDelete("subtasks","GET"));
+        System.out.println("Список подзадач до удаления" + allTasks);
+        List<JsonObject> jsonObjects = allTasks.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        for (JsonObject jsonObject: jsonObjects) {
+            httpTaskClient.clientGetDelete("subtasks/"+jsonObject.get("id").getAsString(),"DELETE");
         }
-        System.out.println("Список подзадач после удаления" + taskManager.getAllSubTasks());
-        System.out.println("Список эпиков после удаления подзадач " + taskManager.getAllEpic());
 
+        List<String> allTasksAfter = listStringResponse(httpTaskClient.clientGetDelete("subtasks","GET"));
+        System.out.println("Список задач после удаления" + allTasksAfter);
+
+        List<String> allEpics = listStringResponse(httpTaskClient.clientGetDelete("epics","GET"));
+        System.out.println("Список эпиков после удаления подзадач " + allEpics);
         System.out.println("Удаляем эпики по очереди");
-        for (Epic task: taskManager.getAllEpic()) {
-            taskManager.deleteEpic(task.getId());
+        List<JsonObject> jsonObjectsEpics = allEpics.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        for (JsonObject jsonObject: jsonObjectsEpics) {
+            httpTaskClient.clientGetDelete("epics/"+jsonObject.get("id").getAsString(),"DELETE");
         }
-        System.out.println("Список эпиков после удаления " + taskManager.getAllEpic());
+        List<String> allEpicsafter = listStringResponse(httpTaskClient.clientGetDelete("epics","GET"));
+        System.out.println("Список эпиков после удаления " + allEpicsafter);
     }
 
-    public static void deleteEpicsAndSubTasks(TaskManager taskManager) {
+    public static List<String> listStringResponse(String response) {
+        return Arrays.stream(response
+                                .replace("[","")
+                                .replace("]","")
+                                .replace("}\",","};")
+                                .replace("}\"","}")
+                                .split(";"))
+                .map(String::trim)
+                .map(task->task.substring(1).replace("\\",""))
+                .toList();
+    }
+
+    public static void deleteEpicsAndSubTasks(HttpTaskClient httpTaskClient) {
         System.out.println("Удаляем эпики по очереди");
-        System.out.println("Список эпиков до удаления " + taskManager.getAllEpic());
-        for (Epic task: taskManager.getAllEpic()) {
-            taskManager.deleteEpic(task.getId());
+        List<String> allEpics = listStringResponse(httpTaskClient.clientGetDelete("epics","GET"));
+        System.out.println("Список эпиков до удаления " + allEpics);
+        List<JsonObject> jsonObjectsEpics = allEpics.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        for (JsonObject jsonObject: jsonObjectsEpics) {
+            httpTaskClient.clientGetDelete("epics/"+jsonObject.get("id").getAsString(),"DELETE");
         }
-        System.out.println("Список эпиков после удаления " + taskManager.getAllEpic());
-        System.out.println("Список подзадач после удаления эпиков " + taskManager.getAllSubTasks());
+        System.out.println("Список эпиков после удаления " + listStringResponse(httpTaskClient.clientGetDelete("epics","GET")));
+        System.out.println("Список подзадач после удаления эпиков " + listStringResponse(httpTaskClient.clientGetDelete("subtasks","GET")));
     }
 
     public static void clearSubTasks(TaskManager taskManager) {
@@ -174,69 +222,88 @@ public class Main {
         System.out.println("Список подзадач после удаления эпиков " + taskManager.getAllSubTasks());
     }
 
-    public static void updateStatuses(TaskManager taskManager) {
+    public static void updateStatuses(HttpTaskClient httpTaskClient) {
         System.out.println("Изменяем статусы заданий");
-        Task task = taskManager.getAllTasks().getFirst();
-        Task task1 = taskManager.getAllTasks().getLast();
+        List<String> listStringsTasks = listStringResponse(httpTaskClient.clientGetDelete("tasks","GET"));
+        List<JsonObject> jsonObjectsTasks = listStringsTasks.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        Task task = new Task(jsonObjectsTasks.get(0));
+        task.setId(jsonObjectsTasks.get(0).get("id").getAsInt());
+        System.out.println(listStringResponse(httpTaskClient.clientGetDelete("tasks","GET")));
         task.setStatus(TaskStatus.DONE);
-        task1.setStatus(TaskStatus.IN_PROGRESS);
-        taskManager.updateTask(task);
-        taskManager.updateTask(task1);
-        System.out.println(taskManager.getAllTasks());
+        httpTaskClient.client("tasks", task);
+        System.out.println(listStringResponse(httpTaskClient.clientGetDelete("tasks","GET")));
+        task.setStatus(TaskStatus.IN_PROGRESS);
+        httpTaskClient.client("tasks", task);
+        System.out.println(listStringResponse(httpTaskClient.clientGetDelete("tasks","GET")));
 
 
         System.out.println("Изменяем статусы подзаданий");
-        Epic epic = taskManager.getAllEpic().getLast();
+        List<String> listStringsEpics = listStringResponse(httpTaskClient.clientGetDelete("epics","GET"));
+        List<JsonObject> jsonObjectsEpics = listStringsEpics.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        Epic epic = new Epic(jsonObjectsEpics.get(0));
+        epic.setId(jsonObjectsEpics.get(0).get("id").getAsInt());
         System.out.println("Начальное состояние " + epic);
-        List<SubTask> subTasks = taskManager.getAllSubTasksByEpic(epic.getId());
-        SubTask subTask = subTasks.getFirst();
-        SubTask subTask1 = subTasks.getLast();
+        List<String> listStringsSubTasksByEpic = listStringResponse(httpTaskClient.clientGetDelete("epics/"+epic.getId()+"/subtasks","GET"));
+        List<JsonObject> jsonObjectsSubTasksByEpic = listStringsSubTasksByEpic.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        SubTask subTask = new SubTask(jsonObjectsSubTasksByEpic.get(0));
+        SubTask subTask1 = new SubTask(jsonObjectsSubTasksByEpic.get(1));
+        subTask.setId(jsonObjectsSubTasksByEpic.get(0).get("id").getAsInt());
+        subTask1.setId(jsonObjectsSubTasksByEpic.get(1).get("id").getAsInt());
         subTask.setStatus(TaskStatus.IN_PROGRESS);
-        taskManager.updateSubTask(subTask);
-        System.out.println("Одно подзадание статус в процессе " + epic);
+        httpTaskClient.client("subtasks", subTask);
+        System.out.println("Одно подзадание статус в процессе " + httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
         subTask.setStatus(TaskStatus.DONE);
-        taskManager.updateSubTask(subTask);
-        System.out.println("Одно подзадание статус сделано " + epic);
+        httpTaskClient.client("subtasks", subTask);
+        System.out.println("Одно подзадание статус сделано " +  httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
         subTask1.setStatus(TaskStatus.IN_PROGRESS);
-        taskManager.updateSubTask(subTask1);
-        System.out.println("Сделано + в процессе " + epic);
+        httpTaskClient.client("subtasks", subTask1);
+        System.out.println("Сделано + в процессе " +  httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
         subTask1.setStatus(TaskStatus.DONE);
-        taskManager.updateSubTask(subTask1);
-        System.out.println("Два подзадания статус сделано " + epic);
+        httpTaskClient.client("subtasks", subTask1);
+        System.out.println("Два подзадания статус сделано " +  httpTaskClient.clientGetDelete("epics/"+epic.getId(),"GET"));
     }
 
-    public static void checkHistory(TaskManager taskManager) {
+    public static void checkHistory(HttpTaskClient httpTaskClient) {
         System.out.println("Проверяем историю обращений");
-        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
-        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
-        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
-        taskManager.getTask(taskManager.getAllTasks().getFirst().getId());
-        taskManager.getSubTask(taskManager.getAllSubTasks().getFirst().getId());
-        taskManager.getEpic(taskManager.getAllEpic().getFirst().getId());
-        System.out.println(taskManager.getHistory());
+        List<String> listStringsTasks = listStringResponse(httpTaskClient.clientGetDelete("tasks","GET"));
+        List<JsonObject> jsonObjectsTasks = listStringsTasks.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        Integer taskId = jsonObjectsTasks.get(0).get("id").getAsInt();
+        List<String> listStringsEpics = listStringResponse(httpTaskClient.clientGetDelete("epics","GET"));
+        List<JsonObject> jsonObjectsEpics = listStringsEpics.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        Integer epicId = jsonObjectsEpics.get(0).get("id").getAsInt();
+        List<String> listStringsSubTasksByEpic = listStringResponse(httpTaskClient.clientGetDelete("epics/"+epicId+"/subtasks","GET"));
+        List<JsonObject> jsonObjectsSubTasksByEpic = listStringsSubTasksByEpic.stream().map(JsonParser::parseString).map(JsonElement::getAsJsonObject).toList();
+        Integer subtaskId = jsonObjectsSubTasksByEpic.get(0).get("id").getAsInt();
+        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
+        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
+        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
+        httpTaskClient.clientGetDelete("tasks/"+taskId,"GET");
+        httpTaskClient.clientGetDelete("subtasks/"+subtaskId,"GET");
+        httpTaskClient.clientGetDelete("epics/"+epicId,"GET");
+        System.out.println(listStringResponse(httpTaskClient.clientGetDelete("history","GET")));
     }
 
-    public static void getResult(TaskManager taskManager) {
+    public static void getResult(HttpTaskClient httpTaskClient) {
         System.out.println("Задания после всех проверок");
-        for (Task task : taskManager.getAllTasks()) {
-            System.out.println("Task " + task.toString());
+        for (String task : listStringResponse(httpTaskClient.clientGetDelete("tasks","GET"))) {
+            System.out.println("Task " + task);
         }
-        for (Epic task : taskManager.getAllEpic()) {
+        for (String task : listStringResponse(httpTaskClient.clientGetDelete("epics","GET"))) {
             System.out.println("Epic " + task.toString());
         }
-        for (SubTask task : taskManager.getAllSubTasks()) {
+        for (String task : listStringResponse(httpTaskClient.clientGetDelete("subtasks","GET"))) {
             System.out.println("SubTask " + task.toString());
         }
         System.out.println("Задания после всех проверок по приоритету");
-        for (Object task : taskManager.getPrioritizedTasks()) {
+        for (Object task : listStringResponse(httpTaskClient.clientGetDelete("prioritized","GET"))) {
             System.out.println(task.toString());
-
         }
     }
+
 }

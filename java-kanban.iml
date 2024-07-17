@@ -6,10 +6,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="corretto-21" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="TEST">
-      <library name="JUnit5.8.1">
+    <orderEntry type="module-library">
+      <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/junit-jupiter-5.8.1.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/junit-jupiter-api-5.8.1.jar!/" />
@@ -24,8 +24,9 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
+    <orderEntry type="library" name="google.code.gson" level="project" />
+    <orderEntry type="module-library" scope="TEST">
+      <library name="JUnit5.8.1">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/junit-jupiter-5.8.1.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/junit-jupiter-api-5.8.1.jar!/" />

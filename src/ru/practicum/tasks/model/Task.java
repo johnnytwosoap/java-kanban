@@ -1,5 +1,9 @@
 package ru.practicum.tasks.model;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +24,18 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.duration = Duration.ofMinutes(duration);
+    }
+
+    public Task(JsonObject jsonObject) {
+        LocalDateTime localDateTime = null;
+        if (!jsonObject.get("startTime").getAsString().equals("null")) {
+            localDateTime =LocalDateTime.parse(jsonObject.get("startTime").getAsString(), formatter);
+        }
+        this.taskName = jsonObject.get("taskName").getAsString();
+        this.description = jsonObject.get("description").getAsString();
+        this.status = TaskStatus.valueOf(jsonObject.get("status").getAsString());
+        this.startTime = localDateTime;
+        this.duration = Duration.ofMinutes(jsonObject.get("duration").getAsInt());
     }
 
     public Task(String taskName, String description, TaskStatus status) {
@@ -88,7 +104,15 @@ public class Task {
         if (startTime != null) {
             startTimeFormatted = startTime.format(formatter);
         }
-        return "Task{id='" + id + "', taskName='" + taskName + "', description='" + description + "', status='" + status + "', startTime='" + startTimeFormatted + "', duration='" + duration.toMinutes() + "'}";
+        return "{\"id\":\"" + id + "\", \"taskName\":\"" + taskName + "\", \"description\":\"" + description + "\", \"status\":\"" + status + "\", \"startTime\":\"" + startTimeFormatted + "\", \"duration\":\"" + duration.toMinutes() + "\"}";
+    }
+
+    public String toJson() {
+        String startTimeFormatted = "null";
+        if (startTime != null) {
+            startTimeFormatted = startTime.format(formatter);
+        }
+        return "{\"id\":\"" + id + "\", \"taskName\":\"" + taskName + "\", \"description\":\"" + description + "\", \"status\":\"" + status + "\", \"startTime\":\"" + startTimeFormatted + "\", \"duration\":\"" + duration.toMinutes() + "\"}";
     }
 
     public String toFile() {

@@ -1,5 +1,8 @@
 package ru.practicum.tasks.model;
 
+import com.google.gson.JsonObject;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,9 @@ public class Epic extends Task {
 
     public Epic(String taskName, String description) {
         super(taskName, description, TaskStatus.NEW);
+    }
+    public Epic(JsonObject jsonObject) {
+        super(jsonObject.get("taskName").getAsString(), jsonObject.get("description").getAsString(), TaskStatus.NEW);
     }
 
     public void addSubTask(SubTask subTask) {
@@ -50,6 +56,22 @@ public class Epic extends Task {
                 subTaskList.append(", ").append(subTaskId);
             }
             return "Epic{id='" + id + "', taskName='" + taskName + "', description='" + description + "', status='" + status + "', startTime='" + startTimeFormatted + "', duration='" + duration.toMinutes() + "', SubTasks{" + subTaskList.substring(2) + "}}";
+        }
+    }
+
+    public String toJson() {
+        String startTimeFormatted = "null";
+        if (startTime != null) {
+            startTimeFormatted = startTime.format(formatter);
+        }
+        if (subTasks.isEmpty()) {
+            return "{\"id\":\"" + id + "\", \"taskName\":\"" + taskName + "\", \"description\":\"" + description + "\", \"status\":\"" + status + "\"}";
+        } else {
+            StringBuilder subTaskList = new StringBuilder();
+            for (Integer subTaskId: subTasks) {
+                subTaskList.append(", ").append(subTaskId);
+            }
+            return "{\"id\":\"" + id + "\", \"taskName\":\"" + taskName + "\", \"description\":\"" + description + "\", \"status\":\"" + status + "\", \"startTime\":\"" + startTimeFormatted + "\", \"duration\":\"" + duration.toMinutes() + "\"}"; //', SubTasks{" + subTaskList.substring(2) + "}}";
         }
     }
 
