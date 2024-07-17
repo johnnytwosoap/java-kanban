@@ -24,7 +24,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private Gson gson;
 
-    public HttpTaskManager(){
+    public HttpTaskManager() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
         gsonBuilder.serializeNulls();
@@ -68,8 +68,8 @@ public class HttpTaskManager extends InMemoryTaskManager {
 
     }
 
-    public void getSubTask(HttpExchange exchange, int id) throws IOException{
-        try{
+    public void getSubTask(HttpExchange exchange, int id) throws IOException {
+        try {
             SubTask task = super.getSubTask(id);
             if (task.getId() > 0) {
                 writeResponse(exchange, task.toJson(), 200);
@@ -82,7 +82,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
 
     }
 
-    public void getEpic(HttpExchange exchange, int id) throws IOException{
+    public void getEpic(HttpExchange exchange, int id) throws IOException {
         try {
             Epic task = super.getEpic(id);
             if (task.getId() > 0) {
@@ -96,7 +96,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
 
     }
 
-    public void postTask(HttpExchange exchange) throws IOException{
+    public void postTask(HttpExchange exchange) throws IOException {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             JsonElement jsonElement = JsonParser.parseString(body);
@@ -124,7 +124,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void deleteTask(HttpExchange exchange, Optional<Integer> id) throws IOException{
+    public void deleteTask(HttpExchange exchange, Optional<Integer> id) throws IOException {
         if (id.isEmpty()) {
             writeResponse(exchange, "\"result\":\"Ошибка удаления задания\"", 406);
         } else {
@@ -133,7 +133,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void postEpic(HttpExchange exchange) throws IOException{
+    public void postEpic(HttpExchange exchange) throws IOException {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
             JsonElement jsonElement = JsonParser.parseString(body);
@@ -161,7 +161,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void deleteEpic(HttpExchange exchange, Optional<Integer> id) throws IOException{
+    public void deleteEpic(HttpExchange exchange, Optional<Integer> id) throws IOException {
         if (id.isEmpty()) {
             writeResponse(exchange, "\"result\":\"Ошибка удаления задания\"", 406);
         } else {
@@ -170,10 +170,10 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void getAllEpic(HttpExchange exchange) throws IOException{
+    public void getAllEpic(HttpExchange exchange) throws IOException {
         try {
             List<Epic> epics = super.getAllEpic();
-            if (epics.isEmpty()){
+            if (epics.isEmpty()) {
                 writeResponse(exchange,"\"result\":\"Список заданий пуст\"", 200);
             } else {
                 writeResponse(exchange, epics.stream().map(Epic::toJson).collect(Collectors.toList()), 200);
@@ -183,7 +183,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void postSubTask(HttpExchange exchange) throws IOException{
+    public void postSubTask(HttpExchange exchange) throws IOException {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
             JsonElement jsonElement = JsonParser.parseString(body);
@@ -212,10 +212,10 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void getAllSubTasks(HttpExchange exchange) throws IOException{
+    public void getAllSubTasks(HttpExchange exchange) throws IOException {
         try {
             List<SubTask> subtasks = super.getAllSubTasks();
-            if (subtasks.isEmpty()){
+            if (subtasks.isEmpty()) {
                 writeResponse(exchange,"\"result\":\"Список заданий пуст\"", 200);
             } else {
                 writeResponse(exchange, subtasks.stream().map(SubTask::toJson).collect(Collectors.toList()), 200);
@@ -225,10 +225,10 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void getAllSubTasksByEpic(HttpExchange exchange, Integer taskId) throws IOException{
+    public void getAllSubTasksByEpic(HttpExchange exchange, Integer taskId) throws IOException {
         try {
             List<SubTask> subtasks = super.getAllSubTasksByEpic(taskId);
-            if (subtasks.isEmpty()){
+            if (subtasks.isEmpty()) {
                 writeResponse(exchange,"\"result\":\"Список заданий пуст\"", 200);
             } else {
                 writeResponse(exchange, subtasks.stream().map(SubTask::toJson).collect(Collectors.toList()), 200);
@@ -238,7 +238,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void deleteSubTask(HttpExchange exchange, Optional<Integer> id) throws IOException{
+    public void deleteSubTask(HttpExchange exchange, Optional<Integer> id) throws IOException {
         if (id.isEmpty()) {
             writeResponse(exchange, "\"result\":\"Ошибка удаления задания\"", 406);
         } else {
@@ -247,14 +247,14 @@ public class HttpTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void errorMethod(HttpExchange exchange) throws IOException{
+    public void errorMethod(HttpExchange exchange) throws IOException {
         writeResponse(exchange, "\"result\":\"Вы использовали какой-то другой метод!\"", 404);
     }
 
     public void getHistory(HttpExchange exchange) throws IOException {
         try {
             List<Task> tasks = super.getHistory();
-            if (tasks.isEmpty()){
+            if (tasks.isEmpty()) {
                 writeResponse(exchange,"\"result\":\"Список истории пуст\"", 200);
             } else {
                 writeResponse(exchange, tasks.stream().map(Task::toJson).collect(Collectors.toList()), 200);
@@ -267,7 +267,7 @@ public class HttpTaskManager extends InMemoryTaskManager {
     public void getPrioritizedTasks(HttpExchange exchange) throws IOException {
         try {
             List<Task> tasks = super.getPrioritizedTasks();
-            if (tasks.isEmpty()){
+            if (tasks.isEmpty()) {
                 writeResponse(exchange,"\"result\":\"Список приоритетных заданий пуст\"", 200);
             } else {
                 writeResponse(exchange, tasks.stream().map(Task::toJson).collect(Collectors.toList()), 200);
